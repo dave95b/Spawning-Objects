@@ -292,6 +292,7 @@ GameObject:
   - component: {fileID: 76961942}
   - component: {fileID: 76961944}
   - component: {fileID: 76961943}
+  - component: {fileID: 76961945}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -333,14 +334,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 76961940}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b16db5197337c324abc02feeab6edb0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   game: {fileID: 76961942}
   createTime: 0.3
-  destroyTime: 300
+  destroyTime: 3
 --- !u!114 &76961944
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -357,6 +358,20 @@ MonoBehaviour:
   createKey: 99
   removeAllKey: 114
   removeRandomKey: 118
+--- !u!114 &76961945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 76961940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20a213eb4cfccc74789d09ebb8ccede4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  game: {fileID: 76961942}
+  count: 1000
 --- !u!1001 &101571800
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3744,6 +3759,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1849756602}
+  - component: {fileID: 1849756603}
   m_Layer: 0
   m_Name: Spawn Zones
   m_TagString: Untagged
@@ -3768,6 +3784,19 @@ Transform:
   m_Father: {fileID: 720044924}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1849756603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1849756601}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ee3c33b382affb4baab7f8f3865f180, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  angularVelocity: {x: 0, y: 25, z: 0}
 --- !u!1001 &1914491191
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3922,6 +3951,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ba81f024ce0ba1468c52bffe6fcc0ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minSpeed: 10
+  maxSpeed: 90
 --- !u!114 &1918154591
 MonoBehaviour:
   m_ObjectHideFlags: 0

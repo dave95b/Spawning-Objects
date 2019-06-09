@@ -3,6 +3,7 @@ using System.Collections;
 using Core.Spawners;
 using SpawnerSystem.Spawners;
 using System.Collections.Generic;
+using UnityEngine.Assertions;
 
 namespace Core
 {
@@ -14,16 +15,31 @@ namespace Core
         private Spawner<Shape> _spawner;
         private List<Shape> _shapes = new List<Shape>(36);
 
-        private void Start()
+        private void Awake()
         {
             _spawner = spawnerPreparer.Spawner;
         }
 
-        
+        private void FixedUpdate()
+        {
+            float deltaTime = Time.deltaTime;
+            int count = _shapes.Count;
+            for (int i = 0; i < count; i++)
+                _shapes[i].CustomUpdate(deltaTime);
+        }
+
+
         public void Create()
         {
             Shape shape = _spawner.Spawn();
             _shapes.Add(shape);
+        }
+
+        public void Create(int count)
+        {
+            Assert.IsTrue(count >= 0);
+            for (int i = 0; i < count; i++)
+                Create();
         }
 
         public void RemoveAll()

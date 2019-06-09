@@ -9,6 +9,10 @@ namespace Core
         [SerializeField]
         private MeshRenderer renderer;
 
+        private int id;
+        public int Id => id;
+
+
         private static int colorPropertyId = Shader.PropertyToID("_Color");
         private static MaterialPropertyBlock propertyBlock;
 
@@ -27,6 +31,21 @@ namespace Core
                 propertyBlock.SetColor(colorPropertyId, value);
                 renderer.SetPropertyBlock(propertyBlock);
             }
+        }
+
+        public Vector3 AngularVelocity { get; set; }
+        public Vector3 Velocity { get; set; }
+
+
+        private void Awake()
+        {
+            id = GetInstanceID();
+        }
+
+        public void CustomUpdate(float deltaTime)
+        {
+            transform.Rotate(AngularVelocity * deltaTime);
+            transform.localPosition += Velocity * deltaTime;
         }
 
         private void Reset()
