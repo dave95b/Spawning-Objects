@@ -11,9 +11,6 @@ namespace Core
         [SerializeField]
         private ShapeSpawnerPreparer spawnerPreparer;
 
-        [SerializeField]
-        private KeyCode createKey = KeyCode.C, returnKey = KeyCode.R;
-
         private Spawner<Shape> _spawner;
         private List<Shape> _shapes = new List<Shape>(36);
 
@@ -22,25 +19,29 @@ namespace Core
             _spawner = spawnerPreparer.Spawner;
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(createKey))
-                Create();
-            else if (Input.GetKeyDown(returnKey))
-                Return();
-        }
-
-        private void Create()
+        
+        public void Create()
         {
             Shape shape = _spawner.Spawn();
             _shapes.Add(shape);
         }
 
-        private void Return()
+        public void RemoveAll()
         {
             foreach (var shape in _shapes)
                 _spawner.Despawn(shape);
             _shapes.Clear();
+        }
+
+        public void RemoveRandom()
+        {
+            if (_shapes.Count == 0)
+                return;
+
+            int index = Random.Range(0, _shapes.Count);
+            var shape = _shapes[index];
+            _spawner.Despawn(shape);
+            _shapes.RemoveAtSwapback(index);
         }
     }
 }

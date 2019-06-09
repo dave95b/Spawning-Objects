@@ -17,11 +17,18 @@ namespace Core.Spawners
 
         public override void Apply(Transform spawned)
         {
-            Vector3 position = transform.position + Random.insideUnitSphere * radius;
+            Vector3 position = transform.TransformPoint(Random.insideUnitSphere);
             float scale = Random.Range(minScale, maxScale);
 
             spawned.SetPositionAndRotation(position, Random.rotation);
             spawned.localScale = Vector3.one * scale;
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.matrix = transform.localToWorldMatrix;
+            Gizmos.DrawWireSphere(Vector3.zero, 1f);
         }
     }
 }

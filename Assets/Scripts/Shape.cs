@@ -21,7 +21,6 @@ namespace Core
         {
             set
             {
-                //renderer.material.color = value;
                 if (propertyBlock is null)
                     propertyBlock = new MaterialPropertyBlock();
 
