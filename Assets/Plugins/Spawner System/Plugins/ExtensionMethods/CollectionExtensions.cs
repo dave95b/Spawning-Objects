@@ -34,6 +34,16 @@ public static class CollectionExtensions {
         list[destinationIndex] = temp;
     }
 
+    public static void RemoveAtSwapback<T>(this IList<T> list, int index)
+    {
+        int lastIndex = list.Count - 1;
+        T tmp = list[lastIndex];
+        list[lastIndex] = list[index];
+        list[index] = tmp;
+
+        list.RemoveAt(lastIndex);
+    }
+
 #endregion IList
 
 #region Arrays

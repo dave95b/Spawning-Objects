@@ -19,6 +19,8 @@ namespace Core.Spawners
         {
             poolPreparers = GetComponentsInChildren<ShapePoolPreparer>().Where(PreparersPredicate).ToArray();
             multiPoolPreparers = GetComponentsInChildren<ShapeMultiPoolPreparer>().Where(PreparersPredicate).ToArray();
+
+            InitializeSelector();
         }
     }
 }
