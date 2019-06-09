@@ -11,14 +11,13 @@ namespace Core.Spawners
         private ShapeMultiPoolPreparer preparer;
         protected override MultiPoolPreparer<Shape> PoolPreparer => preparer;
 
-        private List<ISpawnListener<Shape>> spawnListeners;
-        protected override List<ISpawnListener<Shape>> SpawnListeners => spawnListeners;
-
-
-        private void Awake()
+        protected override List<ISpawnListener<Shape>> SpawnListeners
         {
-            var listeners = GetComponentsInChildren<ISpawnListener<Shape>>();
-            spawnListeners = new List<ISpawnListener<Shape>>(listeners);
+            get
+            {
+                var listeners = GetComponentsInChildren<ISpawnListener<Shape>>();
+                return new List<ISpawnListener<Shape>>(listeners);
+            }
         }
     }
 }
