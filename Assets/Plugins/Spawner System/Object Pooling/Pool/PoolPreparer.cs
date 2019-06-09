@@ -13,7 +13,7 @@ namespace SpawnerSystem.ObjectPooling
         private int size = 10, expandAmount = 5, instantiatedPerFrame = 10;
 
         protected abstract Poolable<T> Prefab { get; }
-        protected virtual IPoolableStateResotrer<T> StateRestorer { get; }
+        protected virtual IPoolableStateResotrer<T> StateRestorer { private set; get; }
         protected virtual IPoolableFactory<T> PoolableFactory { get; }
 
         private Pool<T> pool;
@@ -35,6 +35,7 @@ namespace SpawnerSystem.ObjectPooling
             GetPrewarmedObjects(pooledObjects);
 
             var helper = new PoolHelper<T>(pooledObjects);
+            StateRestorer = StateRestorer ?? new DefaultStateRestorer<T>();
             var poolableFactory = PoolableFactory ?? new PoolableFactory<T>(Prefab, transform, StateRestorer);
             expander = new PoolExpander<T>(pooledObjects, expandAmount, instantiatedPerFrame, poolableFactory);
             var pool = new Pool<T>(pooledObjects, helper, expander, StateRestorer);
@@ -60,11 +61,12 @@ namespace SpawnerSystem.ObjectPooling
         [Button]
         public void CreateObjects()
         {
+            var stateRestorer = StateRestorer ?? new DefaultStateRestorer<T>();
             for (int i = 0; i < size; i++)
             {
                 var created = UnityEditor.PrefabUtility.InstantiatePrefab(Prefab, transform) as Poolable<T>;
                 created.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
-                StateRestorer?.OnReturn(created);
+                stateRestorer.OnReturn(created);
                 PoolableFactory?.OnCreated(created);
             }
         }

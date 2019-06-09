@@ -17,5 +17,11 @@ namespace SpawnerSystem.ObjectPooling
         public Pool<T> Pool;
         [ReadOnly]
         public bool IsUsed;
+
+
+        private void Reset()
+        {
+            Target = GetComponent<T>();
+        }
     }
 }

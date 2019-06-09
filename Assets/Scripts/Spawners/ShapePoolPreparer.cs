@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using SpawnerSystem.ObjectPooling;
 
-namespace Core
+namespace Core.Spawners
 {
     public class ShapePoolPreparer : PoolPreparer<Shape>
     {

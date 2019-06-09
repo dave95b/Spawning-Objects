@@ -5,7 +5,7 @@ namespace SpawnerSystem.Spawners
 {
     public class SpawnPoint : MonoBehaviour, ISpawnPoint
     {
-        public void Apply(Transform spawned)
+        public virtual void Apply(Transform spawned)
         {
             spawned.SetPositionAndRotation(transform.position, transform.rotation);
         }

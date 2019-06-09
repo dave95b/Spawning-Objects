@@ -55,7 +55,6 @@ namespace SpawnerSystem.ObjectPooling
             return pools;
         }
 
-#if UNITY_EDITOR
         [Button]
         protected abstract void FindPoolPreparers();
 
@@ -95,6 +94,5 @@ namespace SpawnerSystem.ObjectPooling
         {
             return preparer != this && preparer.transform.parent == transform;
         }
-#endif
     }
 }

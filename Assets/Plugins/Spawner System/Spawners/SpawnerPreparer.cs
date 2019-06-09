@@ -17,7 +17,8 @@ namespace SpawnerSystem.Spawners
         private SelectorProvider selectorProvider;
 
         protected abstract MultiPoolPreparer<T> PoolPreparer { get; }
-        protected abstract SpawnListenerRepository<T> ListenerRepository { get; }
+        //protected abstract SpawnListenerRepository<T> ListenerRepository { get; }
+        protected virtual List<ISpawnListener<T>> SpawnListeners { get; }
 
         private Spawner<T> spawner;
         public Spawner<T> Spawner
@@ -35,7 +36,7 @@ namespace SpawnerSystem.Spawners
         {
             var pool = PoolPreparer.MultiPool;
             var selector = selectorProvider.Selector;
-            var spawnListeners = new List<ISpawnListener<T>>(ListenerRepository.Listeners);
+            var spawnListeners = SpawnListeners ?? new List<ISpawnListener<T>>();
 
             return new Spawner<T>(pool, spawnPoints, selector, spawnListeners);
         }
