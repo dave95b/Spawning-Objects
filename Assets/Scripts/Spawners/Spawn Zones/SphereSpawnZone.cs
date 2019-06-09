@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using SpawnerSystem.Spawners;
 using NaughtyAttributes;
 
-namespace Core.Spawners
+namespace Core.Spawners.Zones
 {
-    public class SphereSpawnPoint : SpawnPoint
+    public class SphereSpawnZone : SpawnZone
     {
-        public override void Apply(Transform spawned)
-        {
-            Vector3 position = transform.TransformPoint(Random.insideUnitSphere);
-            spawned.transform.position = position;
-        }
+        protected override Vector3 Position => transform.TransformPoint(Random.insideUnitSphere);
 
         private void OnDrawGizmos()
         {
