@@ -137,7 +137,7 @@ namespace SpawnerSystem.Spawners
             T spawned = poolable.Target;
             Assert.IsNotNull(spawned);
 
-            spawnPoint.Apply(spawned.transform);
+            spawnPoint.Apply(spawned);
             spawnedPoolables[spawned] = poolable;
 
             foreach (var listener in spawnListeners)
