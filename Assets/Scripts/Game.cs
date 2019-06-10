@@ -16,7 +16,7 @@ namespace Core
         private List<Shape> _shapes = new List<Shape>(36);
 
 
-        private void FixedUpdate()
+        private void Update()
         {
             float deltaTime = Time.deltaTime;
             int count = _shapes.Count;

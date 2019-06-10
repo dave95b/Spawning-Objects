@@ -1,18 +1,49 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using SpawnerSystem.Spawners;
+using Core.Spawners.Zones;
 
 namespace Core.Spawners.Listeners
 {
-    public class ColorChanger : MonoBehaviour, ISpawnListener<Shape>
+    public class ColorChanger : MonoBehaviour, ISpawnListener<Shape>, ISpawnZoneComponent
     {
+        [SerializeField]
+        private Color baseColor;
+
+        [SerializeField, FloatRangeSlider(0f, 1f)]
+        private FloatRange hueRange, saturationRange, valueRange;
+
+        public void Apply(Shape shape)
+        {
+            DoApply(shape);
+        }
         public void OnSpawned(Shape spawned)
         {
-            spawned.Color = Random.ColorHSV(
-                hueMin: 0f, hueMax: 1f,
-                saturationMin: 0.5f, saturationMax: 1f,
-                valueMin: 0.25f, valueMax: 1f,
-                alphaMin: 1f, alphaMax: 1f);
+            DoApply(spawned);
+        }
+
+        private void DoApply(Shape spawned)
+        {
+            for (int i = 0; i < spawned.Count; i++)
+                spawned.SetColor(RandomColor(), i);
+        }
+
+        private Color RandomColor()
+        {
+            Color.RGBToHSV(baseColor, out float hue, out float saturation, out float value);
+
+            float randomHue = hueRange.RandomRange;
+            float randomSaturation = saturationRange.RandomRange;
+            float randomValue = valueRange.RandomRange;
+
+            return Random.ColorHSV(
+                            hueMin: hue - randomHue,
+                            hueMax: hue + randomHue,
+                            saturationMin: saturation - randomSaturation,
+                            saturationMax: saturation + randomSaturation,
+                            valueMin: value - randomValue,
+                            valueMax: value + randomValue,
+                            alphaMin: 1f, alphaMax: 1f);
         }
 
         public void OnDespawned(Shape despawned) { }

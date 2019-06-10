@@ -2,20 +2,28 @@
 using System.Collections;
 using SpawnerSystem.Spawners;
 using NaughtyAttributes;
+using Core.Spawners.Zones;
 
 namespace Core.Spawners.Listeners
 {
-    public class ScaleRandomizer : MonoBehaviour, ISpawnListener<Shape>
+    public class ScaleRandomizer : MonoBehaviour, ISpawnListener<Shape>, ISpawnZoneComponent
     {
-        [SerializeField, MinValue(0.1f)]
-        private float minScale;
-        [SerializeField, MaxValue(1f)]
-        private float maxScale = 1f;
+        [SerializeField, FloatRangeSlider(0.1f, 2f)]
+        private FloatRange scale;
+
+        public void Apply(Shape shape)
+        {
+            DoApply(shape);
+        }
 
         public void OnSpawned(Shape spawned)
         {
-            float scale = Random.Range(minScale, maxScale);
-            spawned.transform.localScale = Vector3.one * scale;
+            DoApply(spawned);
+        }
+
+        private void DoApply(Shape spawned)
+        {
+            spawned.transform.localScale = Vector3.one * scale.RandomRange;
         }
 
         public void OnDespawned(Shape despawned) { }

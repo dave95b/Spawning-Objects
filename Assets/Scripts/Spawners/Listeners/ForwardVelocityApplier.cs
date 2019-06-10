@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using SpawnerSystem.Spawners;
 
 namespace Core.Spawners.Zones
 {
-    public class ForwardVelocityApplier : MonoBehaviour, ISpawnZoneComponent
+    public class ForwardVelocityApplier : MonoBehaviour, ISpawnZoneComponent, ISpawnListener<Shape>
     {
         [SerializeField]
         private float minSpeed = 0.2f, maxSpeed = 2f;
@@ -11,7 +12,18 @@ namespace Core.Spawners.Zones
         [SerializeField]
         private MovementDirection direction;
 
+
         public void Apply(Shape shape)
+        {
+            DoApply(shape);
+        }
+        
+        public void OnSpawned(Shape spawned)
+        {
+            DoApply(spawned);
+        }
+
+        private void DoApply(Shape shape)
         {
             Vector3 velocity;
             if (direction == MovementDirection.Forward)
@@ -23,6 +35,9 @@ namespace Core.Spawners.Zones
 
             shape.Velocity = velocity * Random.Range(minSpeed, maxSpeed);
         }
+
+        public void OnDespawned(Shape despawned) { }
+
 
         enum MovementDirection
         {

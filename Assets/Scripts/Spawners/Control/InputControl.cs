@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using NaughtyAttributes;
 
 namespace Core
 {
@@ -7,6 +8,9 @@ namespace Core
     {
         [SerializeField]
         private Game game;
+
+        [SerializeField, MinValue(1)]
+        private int createCount = 10;
 
         [SerializeField]
         private KeyCode createKey = KeyCode.C,
@@ -16,7 +20,7 @@ namespace Core
         private void Update()
         {
             if (Input.GetKeyDown(createKey))
-                game.Create();
+                game.Create(createCount);
             else if (Input.GetKeyDown(removeAllKey))
                 game.RemoveAll();
             else if (Input.GetKeyDown(removeRandomKey))

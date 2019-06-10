@@ -1,45 +1,48 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Core
 {
     public class Shape : MonoBehaviour
     {
         [SerializeField]
-        private MeshRenderer renderer;
+        private MeshRenderer[] renderers;
 
         private int id;
         public int Id => id;
 
-
-        private static int colorPropertyId = Shader.PropertyToID("_Color");
-        private static MaterialPropertyBlock propertyBlock;
-
-        public Material Material
-        {
-            set => renderer.material = value;
-        }
-
-        public Color Color
-        {
-            set
-            {
-                if (propertyBlock is null)
-                    propertyBlock = new MaterialPropertyBlock();
-
-                propertyBlock.SetColor(colorPropertyId, value);
-                renderer.SetPropertyBlock(propertyBlock);
-            }
-        }
+        public int Count => renderers.Length;
 
         public Vector3 AngularVelocity { get; set; }
         public Vector3 Velocity { get; set; }
 
 
+        private static int colorPropertyId = Shader.PropertyToID("_Color");
+        private static MaterialPropertyBlock propertyBlock;
+
+
         private void Awake()
         {
             id = GetInstanceID();
+        }
+
+        public void SetColor(Color color, int index)
+        {
+            Assert.IsTrue(index < Count);
+
+            if (propertyBlock is null)
+                propertyBlock = new MaterialPropertyBlock();
+
+            propertyBlock.SetColor(colorPropertyId, color);
+            renderers[index].SetPropertyBlock(propertyBlock);
+        }
+
+        public void SetMaterial(Material material, int index)
+        {
+            Assert.IsTrue(index < Count);
+            renderers[index].material = material;
         }
 
         public void CustomUpdate(float deltaTime)
@@ -50,7 +53,7 @@ namespace Core
 
         private void Reset()
         {
-            renderer = GetComponent<MeshRenderer>();
+            renderers = GetComponentsInChildren<MeshRenderer>();
         }
     }
 }
