@@ -28,6 +28,12 @@ namespace Core
             id = GetInstanceID();
         }
 
+        public void SetColor(Color color)
+        {
+            for (int i = 0; i < Count; i++)
+                SetColor(color, i);
+        }
+
         public void SetColor(Color color, int index)
         {
             Assert.IsTrue(index < Count);
@@ -37,6 +43,12 @@ namespace Core
 
             propertyBlock.SetColor(colorPropertyId, color);
             renderers[index].SetPropertyBlock(propertyBlock);
+        }
+
+        public void SetMaterial(Material material)
+        {
+            for (int i = 0; i < Count; i++)
+                SetMaterial(material, i);
         }
 
         public void SetMaterial(Material material, int index)
