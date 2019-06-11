@@ -6,26 +6,16 @@ using Core.Spawners.Zones;
 
 namespace Core.Spawners.Listeners
 {
-    public class ScaleRandomizer : MonoBehaviour, ISpawnListener<Shape>, ISpawnZoneComponent
+    public class ScaleRandomizer : SpawnZoneListener
     {
         [SerializeField, FloatRangeSlider(0.1f, 2f)]
         private FloatRange scale;
 
-        public void Apply(Shape shape)
-        {
-            DoApply(shape);
-        }
-
-        public void OnSpawned(Shape spawned)
-        {
-            DoApply(spawned);
-        }
-
-        private void DoApply(Shape spawned)
+        protected override void DoOnSpawned(Shape spawned)
         {
             spawned.transform.localScale = Vector3.one * scale.RandomRange;
         }
 
-        public void OnDespawned(Shape despawned) { }
+        protected override void DoOnDespawned(Shape despawned) { }
     }
 }

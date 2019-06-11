@@ -16,15 +16,6 @@ namespace Core
         private List<Shape> _shapes = new List<Shape>(36);
 
 
-        private void Update()
-        {
-            float deltaTime = Time.deltaTime;
-            int count = _shapes.Count;
-            for (int i = 0; i < count; i++)
-                _shapes[i].CustomUpdate(deltaTime);
-        }
-
-
         public void Create()
         {
             Shape shape = Spawner.Spawn();

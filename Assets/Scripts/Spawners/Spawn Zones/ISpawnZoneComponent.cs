@@ -6,6 +6,7 @@ namespace Core.Spawners.Zones
 {
     public interface ISpawnZoneComponent
     {
-        void Apply(Shape shape);
+        void OnSpawnedInZone(Shape shape);
+        void OnDesawnedInZone(Shape shape);
     }
 }

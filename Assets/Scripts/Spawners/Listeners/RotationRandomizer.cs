@@ -2,30 +2,27 @@
 using System.Collections.Generic;
 using SpawnerSystem.Spawners;
 using Core.Spawners.Zones;
+using Systems;
 
 namespace Core.Spawners.Listeners
 {
-    public class RotationRandomizer : MonoBehaviour, ISpawnListener<Shape>, ISpawnZoneComponent
+    public class RotationRandomizer : SpawnZoneListener
     {
         [SerializeField, FloatRangeSlider(0, 180)]
         private FloatRange speed;
 
-        public void Apply(Shape shape)
-        {
-            DoApply(shape);
-        }
+        [SerializeField]
+        private RotationSystem rotationSystem;
 
-        public void OnSpawned(Shape spawned)
-        {
-            DoApply(spawned);
-        }
-
-        private void DoApply(Shape spawned)
+        protected override void DoOnSpawned(Shape spawned)
         {
             spawned.transform.rotation = Random.rotation;
-            spawned.AngularVelocity = Random.onUnitSphere * speed.RandomRange;
+            rotationSystem.AddData(spawned.transform, Random.onUnitSphere * speed.RandomRange);
         }
 
-        public void OnDespawned(Shape despawned) { }
+        protected override void DoOnDespawned(Shape despawned)
+        {
+            rotationSystem.Remove(despawned.transform);
+        }
     }
 }

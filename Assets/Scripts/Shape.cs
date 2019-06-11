@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Core
 {
-    public class Shape : MonoBehaviour
+    public class Shape : MonoBehaviour, IEquatable<Shape>
     {
         [SerializeField]
         private MeshRenderer[] renderers;
@@ -14,9 +15,6 @@ namespace Core
         public int Id => id;
 
         public int Count => renderers.Length;
-
-        public Vector3 AngularVelocity { get; set; }
-        public Vector3 Velocity { get; set; }
 
 
         private static int colorPropertyId = Shader.PropertyToID("_Color");
@@ -57,15 +55,27 @@ namespace Core
             renderers[index].material = material;
         }
 
-        public void CustomUpdate(float deltaTime)
-        {
-            transform.Rotate(AngularVelocity * deltaTime);
-            transform.localPosition += Velocity * deltaTime;
-        }
-
         private void Reset()
         {
             renderers = GetComponentsInChildren<MeshRenderer>();
+        }
+
+        public bool Equals(Shape other)
+        {
+            if (other == null)
+                return false;
+
+            return id == other.id;
+        }
+
+        public override bool Equals(object other)
+        {
+            return Equals(other as Shape);
+        }
+
+        public override int GetHashCode()
+        {
+            return id;
         }
     }
 }

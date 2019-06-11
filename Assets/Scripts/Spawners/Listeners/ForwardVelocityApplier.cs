@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using SpawnerSystem.Spawners;
+using Systems;
 
-namespace Core.Spawners.Zones
+namespace Core.Spawners.Listeners
 {
-    public class ForwardVelocityApplier : MonoBehaviour, ISpawnZoneComponent, ISpawnListener<Shape>
+    public class ForwardVelocityApplier : SpawnZoneListener
     {
         [SerializeField]
         private float minSpeed = 0.2f, maxSpeed = 2f;
@@ -12,32 +13,27 @@ namespace Core.Spawners.Zones
         [SerializeField]
         private MovementDirection direction;
 
+        [SerializeField]
+        private MoveSystem moveSystem;
 
-        public void Apply(Shape shape)
-        {
-            DoApply(shape);
-        }
-        
-        public void OnSpawned(Shape spawned)
-        {
-            DoApply(spawned);
-        }
 
-        private void DoApply(Shape shape)
+        protected override void DoOnSpawned(Shape spawned)
         {
             Vector3 velocity;
             if (direction == MovementDirection.Forward)
                 velocity = transform.forward;
             else if (direction == MovementDirection.Outward)
-                velocity = (shape.transform.position - transform.position).normalized;
+                velocity = (spawned.transform.position - transform.position).normalized;
             else
                 velocity = Random.onUnitSphere;
 
-            shape.Velocity = velocity * Random.Range(minSpeed, maxSpeed);
+            moveSystem.AddData(spawned.transform, velocity);
         }
 
-        public void OnDespawned(Shape despawned) { }
-
+        protected override void DoOnDespawned(Shape despawned)
+        {
+            moveSystem.Remove(despawned.transform);
+        }
 
         enum MovementDirection
         {

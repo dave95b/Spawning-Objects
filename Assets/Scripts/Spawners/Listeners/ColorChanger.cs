@@ -5,7 +5,7 @@ using Core.Spawners.Zones;
 
 namespace Core.Spawners.Listeners
 {
-    public class ColorChanger : MonoBehaviour, ISpawnListener<Shape>, ISpawnZoneComponent
+    public class ColorChanger : SpawnZoneListener
     {
         [SerializeField]
         private Color baseColor;
@@ -37,18 +37,7 @@ namespace Core.Spawners.Listeners
             }
         }
 
-
-        public void Apply(Shape shape)
-        {
-            DoApply(shape);
-        }
-
-        public void OnSpawned(Shape spawned)
-        {
-            DoApply(spawned);
-        }
-
-        private void DoApply(Shape spawned)
+        protected override void DoOnSpawned(Shape spawned)
         {
             if (uniformColors)
                 spawned.SetColor(RandomColor);
@@ -59,6 +48,6 @@ namespace Core.Spawners.Listeners
             }
         }
 
-        public void OnDespawned(Shape despawned) { }
+        protected override void DoOnDespawned(Shape despawned) { }
     }
 }
