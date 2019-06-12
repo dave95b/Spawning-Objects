@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Jobs;
 
 namespace Systems
@@ -9,6 +11,7 @@ namespace Systems
     public abstract class GameSystem : MonoBehaviour
     {
         public abstract JobHandle OnUpdate(JobHandle inputHandle);
+        public abstract void OnLateUpdate();
     }
 
     public abstract class GameSystem<T> : GameSystem where T : struct
@@ -16,8 +19,10 @@ namespace Systems
         protected TransformAccessArray transforms;
         protected NativeList<T> dataList;
 
-        protected JobHandle handle;
-        protected Dictionary<Transform, int> transformPositions = new Dictionary<Transform, int>();
+        protected Dictionary<Transform, int> transformPositions = new Dictionary<Transform, int>(new TransformComparer());
+
+        private List<Pair> toAdd = new List<Pair>(32);
+        private List<Transform> toRemove = new List<Transform>(32);
 
 
         protected virtual void Awake()
@@ -26,25 +31,69 @@ namespace Systems
             dataList = new NativeList<T>(128, Allocator.Persistent);
         }
 
+        public override void OnLateUpdate()
+        {
+            AddScheduled();
+            RemoveScheduled();
+        }
+
 
         public void AddData(Transform transform, T data)
         {
-            int index = dataList.Length;
-            transformPositions[transform] = index;
+            if (transformPositions.ContainsKey(transform))
+                return;
 
-            transforms.Add(transform);
-            dataList.Add(data);
+            var pair = new Pair(transform, data);
+            toAdd.Add(pair);
         }
 
         public void Remove(Transform transform)
         {
-            int index = transformPositions[transform];
-            Transform last = transforms[transforms.length - 1];
+            if (!transformPositions.ContainsKey(transform))
+                return;
 
-            transforms.RemoveAtSwapBack(index);
-            dataList.RemoveAtSwapBack(index);
+            toRemove.Add(transform);
+        }
 
-            transformPositions[last] = index;
+        private void AddScheduled()
+        {
+            Assert.AreEqual(transforms.length, transformPositions.Count);
+
+            foreach (var pair in toAdd)
+            {
+                int index = dataList.Length;
+                transformPositions[pair.Transform] = index;
+
+                transforms.Add(pair.Transform);
+                dataList.Add(pair.Data);
+            }
+
+            toAdd.Clear();
+            Assert.AreEqual(transforms.length, transformPositions.Count);
+        }
+
+        private void RemoveScheduled()
+        {
+            Assert.AreEqual(transforms.length, transformPositions.Count);
+
+            foreach (var transform in toRemove)
+            {
+                int index = transformPositions[transform];
+
+                if (transforms.length > 0)
+                {
+                    Transform last = transforms[transforms.length - 1];
+                    transformPositions[last] = index;
+                }
+
+                transforms.RemoveAtSwapBack(index);
+                dataList.RemoveAtSwapBack(index);
+
+                transformPositions.Remove(transform);
+            }
+
+            toRemove.Clear();
+            Assert.AreEqual(transforms.length, transformPositions.Count);
         }
 
 
@@ -52,6 +101,49 @@ namespace Systems
         {
             transforms.Dispose();
             dataList.Dispose();
+        }
+
+        struct Pair : IEquatable<Pair>
+        {
+            public Transform Transform;
+            public T Data;
+
+            public Pair(Transform transform, T data)
+            {
+                Transform = transform;
+                Data = data;
+            }
+
+            public bool Equals(Pair other)
+            {
+                return Transform == other.Transform;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (obj is Pair other)
+                    return Equals(other);
+
+                return false;
+            }
+
+            public override int GetHashCode()
+            {
+                return Transform.GetHashCode();
+            }
+        }
+    }
+
+    class TransformComparer : IEqualityComparer<Transform>
+    {
+        public bool Equals(Transform x, Transform y)
+        {
+            return ReferenceEquals(x, y);
+        }
+
+        public int GetHashCode(Transform obj)
+        {
+            return obj.GetHashCode();
         }
     }
 }

@@ -17,9 +17,7 @@ namespace Systems
                 DeltaTime = Time.deltaTime
             };
 
-            job.Schedule(transforms, inputHandle);
-
-            return inputHandle;
+            return job.Schedule(transforms, inputHandle); 
         }
     }
 
@@ -27,7 +25,7 @@ namespace Systems
     struct MoveJob : IJobParallelForTransform
     {
         [ReadOnly]
-        public NativeList<Vector3> Velocities;
+        public NativeArray<Vector3> Velocities;
 
         [ReadOnly]
         public float DeltaTime;

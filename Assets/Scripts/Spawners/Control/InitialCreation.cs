@@ -15,6 +15,16 @@ namespace Core
 
         private void Start()
         {
+            StartCoroutine(CreateDelayed());
+        }
+
+        private IEnumerator CreateDelayed()
+        {
+            yield return null;
+            yield return null;
+            yield return null;
+            yield return null;
+            yield return null;
             game.Create(count);
         }
     }

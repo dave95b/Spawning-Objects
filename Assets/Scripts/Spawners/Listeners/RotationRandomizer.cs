@@ -8,7 +8,7 @@ namespace Core.Spawners.Listeners
 {
     public class RotationRandomizer : SpawnZoneListener
     {
-        [SerializeField, FloatRangeSlider(0, 180)]
+        [SerializeField]
         private FloatRange speed;
 
         [SerializeField]
@@ -17,7 +17,10 @@ namespace Core.Spawners.Listeners
         protected override void DoOnSpawned(Shape spawned)
         {
             spawned.transform.rotation = Random.rotation;
-            rotationSystem.AddData(spawned.transform, Random.onUnitSphere * speed.RandomRange);
+
+            float rotateSpeed = speed.RandomRange;
+            if (rotateSpeed != 0f)
+                rotationSystem.AddData(spawned.transform, Random.onUnitSphere * speed.RandomRange);
         }
 
         protected override void DoOnDespawned(Shape despawned)

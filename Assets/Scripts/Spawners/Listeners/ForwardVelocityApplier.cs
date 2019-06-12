@@ -7,8 +7,8 @@ namespace Core.Spawners.Listeners
 {
     public class ForwardVelocityApplier : SpawnZoneListener
     {
-        [SerializeField]
-        private float minSpeed = 0.2f, maxSpeed = 2f;
+        [SerializeField, FloatRangeSlider(0f, 5f)]
+        private FloatRange speed;
 
         [SerializeField]
         private MovementDirection direction;
@@ -27,7 +27,9 @@ namespace Core.Spawners.Listeners
             else
                 velocity = Random.onUnitSphere;
 
-            moveSystem.AddData(spawned.transform, velocity);
+            float moveSpeed = speed.RandomRange;
+            if (moveSpeed != 0f)
+                moveSystem.AddData(spawned.transform, velocity * moveSpeed);
         }
 
         protected override void DoOnDespawned(Shape despawned)

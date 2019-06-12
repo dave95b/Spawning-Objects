@@ -14,14 +14,15 @@ namespace Systems
 
         private void Update()
         {
-            handle.Complete();
             foreach (var system in systems)
                 handle = system.OnUpdate(handle);
         }
 
         private void LateUpdate()
         {
-            
+            handle.Complete();
+            foreach (var system in systems)
+                system.OnLateUpdate();
         }
 
 #if UNITY_EDITOR

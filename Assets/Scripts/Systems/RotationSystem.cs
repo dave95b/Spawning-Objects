@@ -25,7 +25,7 @@ namespace Systems
     struct RotateJob : IJobParallelForTransform
     {
         [ReadOnly]
-        public NativeList<Vector3> AngularVelocities;
+        public NativeArray<Vector3> AngularVelocities;
 
         [ReadOnly]
         public float DeltaTime;

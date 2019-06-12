@@ -36,7 +36,7 @@ namespace Core.Spawners.Listeners
         }
 
         protected abstract void DoOnSpawned(Shape spawned);
-        protected abstract void DoOnDespawned(Shape spawned);
+        protected abstract void DoOnDespawned(Shape despawned);
 
         private void Awake()
         {
