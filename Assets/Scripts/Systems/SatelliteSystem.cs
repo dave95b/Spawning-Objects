@@ -5,6 +5,7 @@ using UnityEngine.Jobs;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Mathematics;
+using UnityEngine.Assertions;
 
 namespace Systems
 {
@@ -48,8 +49,10 @@ namespace Systems
             planetsToAdd.Add(planet);
         }
 
-        protected override void AddScheduled()
+        protected override void OnAddScheduled()
         {
+            Assert.AreEqual(planetsToAdd.Count, toAdd.Count);
+
             foreach (var planet in planetsToAdd)
             {
                 planets.Add(planet);
@@ -57,18 +60,13 @@ namespace Systems
             }
 
             planetsToAdd.Clear();
-            base.AddScheduled();
         }
 
-        protected override void RemoveScheduled()
+        protected override void OnRemoveScheduled(Transform transform)
         {
-            foreach (var transform in toRemove)
-            {
-                int index = transformPositions[transform];
-                planets.RemoveAtSwapBack(index);
-                planetPositions.RemoveAtSwapBack(index);
-            }
-            base.RemoveScheduled();
+            int index = transformPositions[transform];
+            planets.RemoveAtSwapBack(index);
+            planetPositions.RemoveAtSwapBack(index);
         }
 
         protected override void OnDestroy()
@@ -84,12 +82,11 @@ namespace Systems
         public readonly float Frequency;
         public readonly Vector3 SinOffset, CosOffset;
 
-        public SatelliteData(float frequency, float radius)
+        public SatelliteData(float frequency, float radius, Vector3 orbitAxis)
         {
             Frequency = frequency;
             SinOffset = Vector3.forward * radius;
 
-            Vector3 orbitAxis = UnityEngine.Random.onUnitSphere;
             do
             {
                 CosOffset = Vector3.Cross(orbitAxis, UnityEngine.Random.onUnitSphere).normalized;

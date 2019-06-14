@@ -19,6 +19,9 @@ namespace Systems
 
             return job.Schedule(transforms, inputHandle); 
         }
+
+        protected override void OnAddScheduled() { }
+        protected override void OnRemoveScheduled(Transform transform) { }
     }
 
     [BurstCompile]

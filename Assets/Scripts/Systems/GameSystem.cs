@@ -55,8 +55,9 @@ namespace Systems
             toRemove.Add(transform);
         }
 
-        protected virtual void AddScheduled()
+        private void AddScheduled()
         {
+            OnAddScheduled();
             Assert.AreEqual(transforms.length, transformPositions.Count);
 
             foreach (var pair in toAdd)
@@ -72,12 +73,13 @@ namespace Systems
             Assert.AreEqual(transforms.length, transformPositions.Count);
         }
 
-        protected virtual void RemoveScheduled()
+        private void RemoveScheduled()
         {
             Assert.AreEqual(transforms.length, transformPositions.Count);
 
             foreach (var transform in toRemove)
             {
+                OnRemoveScheduled(transform);
                 int index = transformPositions[transform];
 
                 if (transforms.length > 0)
@@ -96,6 +98,8 @@ namespace Systems
             Assert.AreEqual(transforms.length, transformPositions.Count);
         }
 
+        protected abstract void OnAddScheduled();
+        protected abstract void OnRemoveScheduled(Transform transform);
 
         protected virtual void OnDestroy()
         {

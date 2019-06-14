@@ -24,8 +24,7 @@ namespace Core
                 game.Create();
                 _createProgress = 0f;
             }
-
-            if (_destroyProgress >= destroyTime)
+            else if (_destroyProgress >= destroyTime)
             {
                 game.RemoveRandom();
                 _destroyProgress = 0f;

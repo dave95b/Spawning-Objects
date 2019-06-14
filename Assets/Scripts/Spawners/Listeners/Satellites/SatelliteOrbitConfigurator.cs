@@ -14,22 +14,35 @@ namespace Core.Spawners.Listeners.Satellites
         private FloatRange orbitFrequency;
 
         [SerializeField]
-        private SatelliteSystem system;
+        private SatelliteSystem satelliteSystem;
+
+        [SerializeField]
+        private RotationSystem rotationSystem;
 
 
         public void Configure(Shape shape, List<Shape> satellites)
         {
             foreach (var satellite in satellites)
             {
-                var data = new SatelliteData(orbitFrequency.RandomRange, radius.RandomRange);
-                system.AddData(satellite.transform, shape.transform, data);
+                float _frequency = orbitFrequency.RandomRange;
+                float _radius = radius.RandomRange;
+                Vector3 _orbitAxis = Random.onUnitSphere;
+
+                var data = new SatelliteData(_frequency, _radius, _orbitAxis);
+                satelliteSystem.AddData(satellite.transform, shape.transform, data);
+
+                Vector3 angularVelocity = -360f * _frequency * shape.transform.InverseTransformDirection(_orbitAxis) + Random.insideUnitSphere * 0.25f;
+                rotationSystem.AddData(satellite.transform, angularVelocity);
             }
         }
 
         public void OnDespawned(Shape shape, List<Shape> satellites)
         {
             foreach (var satellite in satellites)
-                system.Remove(satellite.transform);
+            {
+                satelliteSystem.Remove(satellite.transform);
+                rotationSystem.Remove(satellite.transform);
+            }
         }
     }
 }

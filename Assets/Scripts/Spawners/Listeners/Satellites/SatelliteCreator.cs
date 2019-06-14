@@ -54,7 +54,7 @@ namespace Core.Spawners.Listeners.Satellites
             var shapeSatellites = satellites[despawned];
 
             foreach (var configurator in configurators)
-                configurator.Configure(despawned, shapeSatellites);
+                configurator.OnDespawned(despawned, shapeSatellites);
 
             foreach (var satellite in shapeSatellites)
                 Spawner.Despawn(satellite);

@@ -11,6 +11,9 @@ namespace Core
         [SerializeField]
         private MeshRenderer[] renderers;
 
+        [SerializeField]
+        private bool enableCollider;
+
         private int id;
         public int Id => id;
 
@@ -24,6 +27,9 @@ namespace Core
         private void Awake()
         {
             id = GetInstanceID();
+
+            var collider = GetComponent<Collider>();
+            collider.enabled = enableCollider;
         }
 
         public void SetColor(Color color)
