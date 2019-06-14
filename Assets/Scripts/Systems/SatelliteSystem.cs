@@ -1,82 +1,135 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using Core;
+using Unity.Jobs;
+using UnityEngine.Jobs;
+using Unity.Burst;
 using Unity.Collections;
+using Unity.Mathematics;
 
 namespace Systems
 {
-    public class SatelliteSystem : MonoBehaviour
+    public class SatelliteSystem : GameSystem<SatelliteData>
     {
-        private List<SatelliteData> satellites = new List<SatelliteData>();
-        protected Dictionary<Transform, int> transformPositions = new Dictionary<Transform, int>(new TransformComparer());
+        private TransformAccessArray planets;
+        private NativeList<Vector3> planetPositions;
 
-        void Update()
+        private List<Transform> planetsToAdd = new List<Transform>(32);
+
+        protected override void Awake()
         {
-            int count = satellites.Count;
-            float time = Time.time;
-
-            for (int i = 0; i < count; i++)
+            base.Awake();
+            planets = new TransformAccessArray(128);
+            planetPositions = new NativeList<Vector3>(Allocator.Persistent);
+        }
+        
+        public override JobHandle OnUpdate(JobHandle inputHandle)
+        {
+            var positionsJob = new PlanetPositionsJob
             {
-                var data = satellites[i];
-                float t = 2f * Mathf.PI * data.Frequency * time;
+                PlanetPositions = planetPositions
+            };
 
-                Vector3 position = data.Planet.position + data.CosOffset * Mathf.Cos(t) + data.SinOffset * Mathf.Sin(t);
-                data.Satellite.position = position;
-            }
+            var satelliteJob = new SatelliteJob
+            {
+                Data = dataList,
+                PlanetPositions = planetPositions,
+                Time = Time.time
+            };
+
+            var handle = positionsJob.Schedule(planets);
+            handle = JobHandle.CombineDependencies(handle, inputHandle);
+
+            return satelliteJob.Schedule(transforms, handle);
         }
 
-        public void AddData(in SatelliteData data)
+        public void AddData(Transform satellite, Transform planet, in SatelliteData data)
         {
-            if (transformPositions.ContainsKey(data.Satellite))
-                return;
-
-            int index = satellites.Count;
-            transformPositions[data.Satellite] = index;
-
-            satellites.Add(data);
+            AddData(satellite, data);
+            planetsToAdd.Add(planet);
         }
 
-        public void Remove(Transform transform)
+        protected override void AddScheduled()
         {
-            if (!transformPositions.ContainsKey(transform))
-                return;
-
-            int index = transformPositions[transform];
-
-            if (satellites.Count > 0)
+            foreach (var planet in planetsToAdd)
             {
-                Transform last = satellites[satellites.Count - 1].Satellite;
-                transformPositions[last] = index;
+                planets.Add(planet);
+                planetPositions.Add(Vector3.zero);
             }
 
-            satellites.RemoveAtSwapBack(index);
+            planetsToAdd.Clear();
+            base.AddScheduled();
+        }
 
-            transformPositions.Remove(transform);
+        protected override void RemoveScheduled()
+        {
+            foreach (var transform in toRemove)
+            {
+                int index = transformPositions[transform];
+                planets.RemoveAtSwapBack(index);
+                planetPositions.RemoveAtSwapBack(index);
+            }
+            base.RemoveScheduled();
+        }
+
+        protected override void OnDestroy()
+        {
+            planets.Dispose();
+            planetPositions.Dispose();
+            base.OnDestroy();
         }
     }
 
     public readonly struct SatelliteData
     {
-        public readonly Transform Satellite, Planet;
         public readonly float Frequency;
         public readonly Vector3 SinOffset, CosOffset;
 
-        public SatelliteData(Transform satellite, Transform planet, float frequency, float radius) 
+        public SatelliteData(float frequency, float radius)
         {
-            Satellite = satellite;
-            Planet = planet;
             Frequency = frequency;
-
             SinOffset = Vector3.forward * radius;
 
-            Vector3 orbitAxis = Random.onUnitSphere;
+            Vector3 orbitAxis = UnityEngine.Random.onUnitSphere;
             do
             {
-                CosOffset = Vector3.Cross(orbitAxis, Random.onUnitSphere).normalized;
+                CosOffset = Vector3.Cross(orbitAxis, UnityEngine.Random.onUnitSphere).normalized;
             }
             while (CosOffset.sqrMagnitude < 0.1f);
 
             CosOffset *= radius;
+        }
+    }
+
+    [BurstCompile]
+    struct PlanetPositionsJob : IJobParallelForTransform
+    {
+        [WriteOnly]
+        public NativeArray<Vector3> PlanetPositions;
+
+        public void Execute(int index, TransformAccess planet)
+        {
+            PlanetPositions[index] = planet.position;
+        }
+    }
+
+    [BurstCompile]
+    struct SatelliteJob : IJobParallelForTransform
+    {
+        [ReadOnly]
+        public NativeArray<SatelliteData> Data;
+
+        [ReadOnly]
+        public NativeArray<Vector3> PlanetPositions;
+
+        [ReadOnly]
+        public float Time;
+
+        public void Execute(int index, TransformAccess transform)
+        {
+            var data = Data[index];
+            float t = 2f * math.PI * data.Frequency * Time;
+
+            transform.position = PlanetPositions[index] + data.CosOffset * math.cos(t) + data.SinOffset * math.sin(t);
         }
     }
 }

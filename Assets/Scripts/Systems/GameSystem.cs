@@ -21,8 +21,8 @@ namespace Systems
 
         protected Dictionary<Transform, int> transformPositions = new Dictionary<Transform, int>(new TransformComparer());
 
-        private List<Pair> toAdd = new List<Pair>(32);
-        private List<Transform> toRemove = new List<Transform>(32);
+        protected List<Pair> toAdd = new List<Pair>(32);
+        protected List<Transform> toRemove = new List<Transform>(32);
 
 
         protected virtual void Awake()
@@ -47,7 +47,7 @@ namespace Systems
             toAdd.Add(pair);
         }
 
-        public void Remove(Transform transform)
+        public virtual void Remove(Transform transform)
         {
             if (!transformPositions.ContainsKey(transform))
                 return;
@@ -55,7 +55,7 @@ namespace Systems
             toRemove.Add(transform);
         }
 
-        private void AddScheduled()
+        protected virtual void AddScheduled()
         {
             Assert.AreEqual(transforms.length, transformPositions.Count);
 
@@ -72,7 +72,7 @@ namespace Systems
             Assert.AreEqual(transforms.length, transformPositions.Count);
         }
 
-        private void RemoveScheduled()
+        protected virtual void RemoveScheduled()
         {
             Assert.AreEqual(transforms.length, transformPositions.Count);
 
@@ -103,7 +103,7 @@ namespace Systems
             dataList.Dispose();
         }
 
-        struct Pair : IEquatable<Pair>
+        protected struct Pair : IEquatable<Pair>
         {
             public Transform Transform;
             public T Data;

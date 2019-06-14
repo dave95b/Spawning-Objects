@@ -21,8 +21,8 @@ namespace Core.Spawners.Listeners.Satellites
         {
             foreach (var satellite in satellites)
             {
-                var data = new SatelliteData(satellite.transform, shape.transform, orbitFrequency.RandomRange, radius.RandomRange);
-                system.AddData(data);
+                var data = new SatelliteData(orbitFrequency.RandomRange, radius.RandomRange);
+                system.AddData(satellite.transform, shape.transform, data);
             }
         }
 

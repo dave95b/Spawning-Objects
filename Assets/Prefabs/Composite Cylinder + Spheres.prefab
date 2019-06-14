@@ -175,6 +175,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 761371747888981815, guid: 8b130982af1c40e418a52c659cf3ef1f,
+        type: 3}
+      propertyPath: m_Name
+      value: Composite Cylinder + Spheres
+      objectReference: {fileID: 0}
     - target: {fileID: 6010302533815676685, guid: 8b130982af1c40e418a52c659cf3ef1f,
         type: 3}
       propertyPath: renderers.Array.size
@@ -190,11 +195,11 @@ PrefabInstance:
       propertyPath: renderers.Array.data[2]
       value: 
       objectReference: {fileID: 6823878118389514924}
-    - target: {fileID: 761371747888981815, guid: 8b130982af1c40e418a52c659cf3ef1f,
+    - target: {fileID: 761371747888981802, guid: 8b130982af1c40e418a52c659cf3ef1f,
         type: 3}
-      propertyPath: m_Name
-      value: Composite Cylinder + Spheres
-      objectReference: {fileID: 0}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
     - target: {fileID: 761371747888981803, guid: 8b130982af1c40e418a52c659cf3ef1f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -250,11 +255,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 761371747888981802, guid: 8b130982af1c40e418a52c659cf3ef1f,
-        type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8b130982af1c40e418a52c659cf3ef1f, type: 3}
 --- !u!1 &1313493902884725157 stripped
