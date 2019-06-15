@@ -36,13 +36,6 @@ namespace Core.Spawners.Listeners.Satellites
             }
         }
 
-        public void OnDespawned(Shape shape, List<Shape> satellites)
-        {
-            foreach (var satellite in satellites)
-            {
-                satelliteSystem.Remove(satellite.transform);
-                rotationSystem.Remove(satellite.transform);
-            }
-        }
+        public void OnDespawned(Shape shape, List<Shape> satellites) { }
     }
 }

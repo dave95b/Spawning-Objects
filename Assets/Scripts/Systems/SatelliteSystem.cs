@@ -64,6 +64,8 @@ namespace Systems
 
         protected override void OnRemoveScheduled(Transform transform)
         {
+            Assert.AreEqual(planets.length, transformPositions.Count);
+
             int index = transformPositions[transform];
             planets.RemoveAtSwapBack(index);
             planetPositions.RemoveAtSwapBack(index);

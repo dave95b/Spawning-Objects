@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using SpawnerSystem.Spawners;
+using Systems;
 
 namespace Core.Spawners.Listeners.Satellites
 {
@@ -18,10 +19,19 @@ namespace Core.Spawners.Listeners.Satellites
         [SerializeField]
         private ShapeSpawnerPreparer spawnerPreparer;
 
+        [SerializeField]
+        private MoveSystem moveSystem;
+
+        [SerializeField]
+        private SatelliteSystem satelliteSystem;
+
         private Spawner<Shape> Spawner => spawnerPreparer.Spawner;
 
         private Dictionary<Shape, List<Shape>> satellites = new Dictionary<Shape, List<Shape>>();
         private ISatelliteConfigurator[] configurators;
+
+        private List<SatelliteData> scheduled = new List<SatelliteData>();
+
 
         private void Awake()
         {
@@ -57,9 +67,27 @@ namespace Core.Spawners.Listeners.Satellites
                 configurator.OnDespawned(despawned, shapeSatellites);
 
             foreach (var satellite in shapeSatellites)
-                Spawner.Despawn(satellite);
+            {
+                var position = new SatelliteData(satellite, satellite.transform.localPosition);
+                scheduled.Add(position);
+            }
 
             shapeSatellites.Clear();
+        }
+
+        private void LateUpdate()
+        {
+            float deltaTime = Time.deltaTime;
+            foreach (var data in scheduled)
+            {
+                Shape satellite = data.Satellite;
+                Vector3 velocity = (satellite.transform.localPosition - data.Position) / deltaTime;
+
+                satelliteSystem.Remove(satellite.transform);
+                moveSystem.AddData(satellite.transform, velocity);
+            }
+
+            scheduled.Clear();
         }
 
 
@@ -70,6 +98,19 @@ namespace Core.Spawners.Listeners.Satellites
             satellite.transform.localScale = shape.transform.localScale * scale.RandomRange;
 
             return satellite;
+        }
+
+
+        struct SatelliteData
+        {
+            public Shape Satellite;
+            public Vector3 Position;
+
+            public SatelliteData(Shape satellite, Vector3 position)
+            {
+                Satellite = satellite;
+                Position = position;
+            }
         }
     }
 }

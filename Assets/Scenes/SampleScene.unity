@@ -174,7 +174,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 76961940}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b16db5197337c324abc02feeab6edb0a, type: 3}
   m_Name: 
@@ -195,7 +195,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   game: {fileID: 76961942}
-  createCount: 50
+  createCount: 250
   createKey: 99
   removeAllKey: 114
   removeRandomKey: 118
@@ -212,7 +212,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   game: {fileID: 76961942}
-  count: 50
+  count: 10
 --- !u!1 &232183892
 GameObject:
   m_ObjectHideFlags: 0
@@ -341,13 +341,13 @@ MonoBehaviour:
   baseColor: {r: 0.09158063, g: 0.707528, b: 0.9245283, a: 1}
   hueRange:
     min: 0
-    max: 0.1
+    max: 0.2
   saturationRange:
     min: 0
     max: 0.5
   valueRange:
     min: 0
-    max: 0.49999997
+    max: 0.5
   uniformColors: 0
 --- !u!114 &336511120
 MonoBehaviour:
@@ -517,7 +517,7 @@ MonoBehaviour:
   isInSpawnZone: 0
   speed:
     min: 0
-    max: 0
+    max: 1
   direction: 0
   moveSystem: {fileID: 2126352231}
 --- !u!114 &690497195
@@ -536,13 +536,13 @@ MonoBehaviour:
   baseColor: {r: 0.9339623, g: 0.2511125, b: 0.7907155, a: 1}
   hueRange:
     min: 0
-    max: 0.1
+    max: 0.2
   saturationRange:
     min: 0
     max: 0.5
   valueRange:
     min: 0
-    max: 0.49999997
+    max: 0.5
   uniformColors: 0
 --- !u!114 &690497196
 MonoBehaviour:
@@ -558,10 +558,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInSpawnZone: 0
   offset:
-    min: -1
-    max: 1
+    min: 0
+    max: 0
   frequency:
-    min: 0.86782277
+    min: 1
     max: 1
   direction: 1
   system: {fileID: 2126352229}
@@ -849,6 +849,83 @@ MonoBehaviour:
   expandAmount: 10
   instantiatedPerFrame: 10
   prefab: {fileID: 7914132882546542088, guid: 986cc8920e747ba47ba5b17906e56658, type: 3}
+--- !u!1 &897040662
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 897040663}
+  - component: {fileID: 897040665}
+  - component: {fileID: 897040664}
+  m_Layer: 0
+  m_Name: Satellites
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &897040663
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897040662}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1918154587}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &897040664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897040662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03f37e3fab420654a992fc37c005239c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius:
+    min: 1
+    max: 5
+  orbitFrequency:
+    min: 0.1
+    max: 0.5
+  satelliteSystem: {fileID: 2126352233}
+  rotationSystem: {fileID: 2126352227}
+--- !u!114 &897040665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897040662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37833f3d47510f641ad13db091e19f41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isInSpawnZone: 0
+  amount:
+    min: 1
+    max: 5
+  distance:
+    min: 0.5
+    max: 1.5
+  scale:
+    min: 0.39999998
+    max: 0.6
+  spawnerPreparer: {fileID: 2119368634}
+  moveSystem: {fileID: 2126352231}
+  satelliteSystem: {fileID: 2126352233}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -900,7 +977,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 38
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -1248,13 +1325,13 @@ MonoBehaviour:
   baseColor: {r: 0.11525452, g: 0.6981132, b: 0.15005203, a: 1}
   hueRange:
     min: 0
-    max: 0.1
+    max: 0.2
   saturationRange:
     min: 0
     max: 0.5
   valueRange:
     min: 0
-    max: 0.49999997
+    max: 0.5
   uniformColors: 0
 --- !u!114 &1798658697
 MonoBehaviour:
@@ -1270,8 +1347,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInSpawnZone: 0
   offset:
-    min: 0.5
-    max: 1
+    min: 0
+    max: 0
   frequency:
     min: 1
     max: 1
@@ -1386,16 +1463,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInSpawnZone: 0
-  baseColor: {r: 1, g: 1, b: 1, a: 1}
+  baseColor: {r: 1, g: 0, b: 0, a: 1}
   hueRange:
-    min: 0
-    max: 1
+    min: 0.3
+    max: 0.7
   saturationRange:
-    min: 0
-    max: 1
+    min: 0.3
+    max: 0.7
   valueRange:
-    min: 0
-    max: 1
+    min: 0.3
+    max: 0.7
   uniformColors: 0
 --- !u!114 &1889733405
 MonoBehaviour:
@@ -1425,8 +1502,6 @@ GameObject:
   - component: {fileID: 1918154587}
   - component: {fileID: 1918154588}
   - component: {fileID: 1918154591}
-  - component: {fileID: 1918154589}
-  - component: {fileID: 1918154590}
   m_Layer: 0
   m_Name: Listeners
   m_TagString: Untagged
@@ -1444,7 +1519,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 897040663}
   m_Father: {fileID: 720044924}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1465,49 +1541,6 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 9c2226dc6e5ba5840942853f2806bbdf, type: 2}
   - {fileID: 2100000, guid: 9fc1822ea8a2d2f4ebddc8c21fdb4882, type: 2}
   - {fileID: 2100000, guid: 39e3e247c0955894cbe0f4e6c943f712, type: 2}
---- !u!114 &1918154589
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1918154586}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37833f3d47510f641ad13db091e19f41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isInSpawnZone: 0
-  amount:
-    min: 1
-    max: 5
-  distance:
-    min: 0.5
-    max: 1.5
-  scale:
-    min: 0.39999998
-    max: 0.6
-  spawnerPreparer: {fileID: 2119368634}
---- !u!114 &1918154590
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1918154586}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03f37e3fab420654a992fc37c005239c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  radius:
-    min: 1
-    max: 5
-  orbitFrequency:
-    min: 0.1
-    max: 0.5
-  satelliteSystem: {fileID: 2126352233}
-  rotationSystem: {fileID: 2126352227}
 --- !u!114 &1918154591
 MonoBehaviour:
   m_ObjectHideFlags: 0
