@@ -16,6 +16,9 @@ namespace Core.Spawners.Listeners.Satellites
         [SerializeField, FloatRangeSlider(0.1f, 0.75f)]
         private FloatRange scale;
 
+        [SerializeField, FloatRangeSlider(0.1f, 2f)]
+        private FloatRange scaleDuration;
+
         [SerializeField]
         private ShapeSpawnerPreparer spawnerPreparer;
 
@@ -25,17 +28,23 @@ namespace Core.Spawners.Listeners.Satellites
         [SerializeField]
         private SatelliteSystem satelliteSystem;
 
+        [SerializeField]
+        private ScaleSystem scaleSystem;
+
         private Spawner<Shape> Spawner => spawnerPreparer.Spawner;
 
         private Dictionary<Shape, List<Shape>> satellites = new Dictionary<Shape, List<Shape>>();
         private ISatelliteConfigurator[] configurators;
 
-        private List<SatelliteData> scheduled = new List<SatelliteData>();
+        private List<SatelliteData> scheduled = new List<SatelliteData>(64);
 
+        private ActionSource<Shape> spawnedActionSource, despawnedActionSource;
 
         private void Awake()
         {
             configurators = GetComponentsInChildren<ISatelliteConfigurator>();
+            spawnedActionSource = new ActionSource<Shape>((shape) => () => scaleSystem.Remove(shape.transform));
+            despawnedActionSource = new ActionSource<Shape>((satellite) => () => OnSatelliteDespawned(satellite));
         }
 
 
@@ -47,12 +56,13 @@ namespace Core.Spawners.Listeners.Satellites
                 satellites[spawned] = list;
             }
 
-            int count = (int)amount.RandomRange;
+            int count = (int)amount.Random;
 
             for (int i = 0; i < count; i++)
             {
                 Shape satellite = SpawnSatelliteFor(spawned);
                 list.Add(satellite);
+                scaleSystem.AddData(satellite.transform, scaleDuration.Random, 0f, satellite.Scale, spawnedActionSource[satellite]);
             }
 
             foreach (var configurator in configurators)
@@ -63,16 +73,28 @@ namespace Core.Spawners.Listeners.Satellites
         {
             var shapeSatellites = satellites[despawned];
 
-            foreach (var configurator in configurators)
-                configurator.OnDespawned(despawned, shapeSatellites);
-
             foreach (var satellite in shapeSatellites)
             {
-                var position = new SatelliteData(satellite, satellite.transform.localPosition);
+                var transform = satellite.transform;
+                var position = new SatelliteData(satellite, transform.localPosition);
                 scheduled.Add(position);
+                satelliteSystem.Remove(transform);
+
+                scaleSystem.Remove(transform);
+                scaleSystem.AddData(transform, scaleDuration.Random, transform.localScale.x, endScale: 0f, despawnedActionSource[satellite]);
             }
 
             shapeSatellites.Clear();
+        }
+
+        private void OnSatelliteDespawned(Shape satellite)
+        {
+            foreach (var configurator in configurators)
+                configurator.OnDespawned(satellite);
+
+            scaleSystem.Remove(satellite.transform);
+            moveSystem.Remove(satellite.transform);
+            Spawner.Despawn(satellite);
         }
 
         private void LateUpdate()
@@ -83,7 +105,6 @@ namespace Core.Spawners.Listeners.Satellites
                 Shape satellite = data.Satellite;
                 Vector3 velocity = (satellite.transform.localPosition - data.Position) / deltaTime;
 
-                satelliteSystem.Remove(satellite.transform);
                 moveSystem.AddData(satellite.transform, velocity);
             }
 
@@ -94,8 +115,9 @@ namespace Core.Spawners.Listeners.Satellites
         private Shape SpawnSatelliteFor(Shape shape)
         {
             Shape satellite = Spawner.Spawn();
-            satellite.transform.position = shape.transform.position + Random.onUnitSphere * distance.RandomRange;
-            satellite.transform.localScale = shape.transform.localScale * scale.RandomRange;
+            satellite.transform.position = shape.transform.position + Random.onUnitSphere * distance.Random;
+            satellite.transform.localScale = Vector3.zero;
+            satellite.Scale = shape.Scale * scale.Random;
 
             return satellite;
         }

@@ -20,8 +20,8 @@ namespace Systems
             return job.Schedule(transforms, inputHandle); 
         }
 
-        protected override void OnAddScheduled() { }
-        protected override void OnRemoveScheduled(Transform transform) { }
+        protected override void OnAddScheduled(in Pair data) { }
+        protected override void OnRemoveScheduled(Transform transform, int index) { }
     }
 
     [BurstCompile]

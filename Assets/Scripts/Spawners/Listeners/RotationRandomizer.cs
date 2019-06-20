@@ -1,8 +1,5 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-using SpawnerSystem.Spawners;
-using Core.Spawners.Zones;
-using Systems;
+﻿using Systems;
+using UnityEngine;
 
 namespace Core.Spawners.Listeners
 {
@@ -18,9 +15,9 @@ namespace Core.Spawners.Listeners
         {
             spawned.transform.rotation = Random.rotation;
 
-            float rotateSpeed = speed.RandomRange;
+            float rotateSpeed = speed.Random;
             if (rotateSpeed != 0f)
-                rotationSystem.AddData(spawned.transform, Random.onUnitSphere * speed.RandomRange);
+                rotationSystem.AddData(spawned.transform, Random.onUnitSphere * speed.Random);
         }
 
         protected override void DoOnDespawned(Shape despawned)

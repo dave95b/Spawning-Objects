@@ -27,7 +27,7 @@ namespace Core.Spawners.Listeners
             else
                 velocity = Random.onUnitSphere;
 
-            float moveSpeed = speed.RandomRange;
+            float moveSpeed = speed.Random;
             if (moveSpeed != 0f)
                 moveSystem.AddData(spawned.transform, velocity * moveSpeed);
         }

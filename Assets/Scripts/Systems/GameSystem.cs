@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NaughtyAttributes;
+using System;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
@@ -23,6 +24,10 @@ namespace Systems
 
         protected List<Pair> toAdd = new List<Pair>(32);
         protected List<Transform> toRemove = new List<Transform>(32);
+        protected HashSet<Transform> toRemoveSet = new HashSet<Transform>(new TransformComparer());
+
+        [ShowNativeProperty]
+        private int DataCount => dataList.IsCreated ? dataList.Length : -1;
 
 
         protected virtual void Awake()
@@ -33,18 +38,20 @@ namespace Systems
 
         public override void OnLateUpdate()
         {
-            AddScheduled();
             RemoveScheduled();
+            AddScheduled();
         }
 
 
-        public void AddData(Transform transform, T data)
+        public bool AddData(Transform transform, T data)
         {
-            if (transformPositions.ContainsKey(transform))
-                return;
+            if (transformPositions.ContainsKey(transform) && !toRemoveSet.Contains(transform))
+                return false;
 
             var pair = new Pair(transform, data);
             toAdd.Add(pair);
+
+            return true;
         }
 
         public virtual void Remove(Transform transform)
@@ -52,21 +59,24 @@ namespace Systems
             if (!transformPositions.ContainsKey(transform))
                 return;
 
-            toRemove.Add(transform);
+            if (toRemoveSet.Add(transform))
+                toRemove.Add(transform);
         }
 
         private void AddScheduled()
         {
-            OnAddScheduled();
             Assert.AreEqual(transforms.length, transformPositions.Count);
 
-            foreach (var pair in toAdd)
+            for (int i = toAdd.Count - 1; i >= 0; i--)
             {
+                var pair = toAdd[i];
                 int index = dataList.Length;
                 transformPositions[pair.Transform] = index;
 
                 transforms.Add(pair.Transform);
                 dataList.Add(pair.Data);
+
+                OnAddScheduled(pair);
             }
 
             toAdd.Clear();
@@ -79,8 +89,8 @@ namespace Systems
 
             foreach (var transform in toRemove)
             {
-                OnRemoveScheduled(transform);
                 int index = transformPositions[transform];
+                OnRemoveScheduled(transform, index);
 
                 if (transforms.length > 0)
                 {
@@ -95,11 +105,12 @@ namespace Systems
             }
 
             toRemove.Clear();
+            toRemoveSet.Clear();
             Assert.AreEqual(transforms.length, transformPositions.Count);
         }
 
-        protected abstract void OnAddScheduled();
-        protected abstract void OnRemoveScheduled(Transform transform);
+        protected abstract void OnAddScheduled(in Pair pair);
+        protected abstract void OnRemoveScheduled(Transform transform, int index);
 
         protected virtual void OnDestroy()
         {

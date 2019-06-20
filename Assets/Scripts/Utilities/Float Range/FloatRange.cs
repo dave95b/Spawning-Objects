@@ -22,7 +22,7 @@ namespace Core
             set => max = Mathf.Max(value, min);
         }
 
-        public float RandomRange => UnityEngine.Random.Range(min, max);
+        public float Random => UnityEngine.Random.Range(min, max);
 
 
         public bool Equals(FloatRange other)

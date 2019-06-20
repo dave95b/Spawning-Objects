@@ -25,7 +25,7 @@ namespace Core.Spawners.Listeners
             else
                 oscillationOffset = Random.onUnitSphere;
 
-            var data = new OscillationData(oscillationOffset * offset.RandomRange, frequency.RandomRange);
+            var data = new OscillationData(oscillationOffset * offset.Random, frequency.Random);
 
             system.AddData(spawned.transform, data);
         }

@@ -20,7 +20,7 @@ namespace Systems
         {
             base.Awake();
             planets = new TransformAccessArray(128);
-            planetPositions = new NativeList<Vector3>(Allocator.Persistent);
+            planetPositions = new NativeList<Vector3>(128, Allocator.Persistent);
         }
         
         public override JobHandle OnUpdate(JobHandle inputHandle)
@@ -37,36 +37,31 @@ namespace Systems
                 Time = Time.time
             };
 
-            var handle = positionsJob.Schedule(planets);
-            handle = JobHandle.CombineDependencies(handle, inputHandle);
-
-            return satelliteJob.Schedule(transforms, handle);
+            inputHandle = positionsJob.Schedule(planets, inputHandle);
+            return satelliteJob.Schedule(transforms, inputHandle);
         }
 
         public void AddData(Transform satellite, Transform planet, in SatelliteData data)
         {
-            AddData(satellite, data);
-            planetsToAdd.Add(planet);
+            if (AddData(satellite, data))
+                planetsToAdd.Add(planet);
         }
 
-        protected override void OnAddScheduled()
+        protected override void OnAddScheduled(in Pair pair)
         {
-            Assert.AreEqual(planetsToAdd.Count, toAdd.Count);
+            int last = planetsToAdd.Count - 1;
+            var planet = planetsToAdd[last];
 
-            foreach (var planet in planetsToAdd)
-            {
-                planets.Add(planet);
-                planetPositions.Add(Vector3.zero);
-            }
+            planets.Add(planet);
+            planetPositions.Add(Vector3.zero);
 
-            planetsToAdd.Clear();
+            planetsToAdd.RemoveAt(last);
         }
 
-        protected override void OnRemoveScheduled(Transform transform)
+        protected override void OnRemoveScheduled(Transform transform, int index)
         {
             Assert.AreEqual(planets.length, transformPositions.Count);
 
-            int index = transformPositions[transform];
             planets.RemoveAtSwapBack(index);
             planetPositions.RemoveAtSwapBack(index);
         }
@@ -111,7 +106,8 @@ namespace Systems
         }
     }
 
-    [BurstCompile]
+
+    [BurstCompile(FloatPrecision.Low, FloatMode.Fast)]
     struct SatelliteJob : IJobParallelForTransform
     {
         [ReadOnly]

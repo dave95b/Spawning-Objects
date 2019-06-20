@@ -24,8 +24,8 @@ namespace Core.Spawners.Listeners.Satellites
         {
             foreach (var satellite in satellites)
             {
-                float _frequency = orbitFrequency.RandomRange;
-                float _radius = radius.RandomRange;
+                float _frequency = orbitFrequency.Random;
+                float _radius = radius.Random;
                 Vector3 _orbitAxis = Random.onUnitSphere;
 
                 var data = new SatelliteData(_frequency, _radius, _orbitAxis);
@@ -36,6 +36,10 @@ namespace Core.Spawners.Listeners.Satellites
             }
         }
 
-        public void OnDespawned(Shape shape, List<Shape> satellites) { }
+        public void OnDespawned(Shape satellite)
+        {
+            var transform = satellite.transform;
+            rotationSystem.Remove(transform);
+        }
     }
 }

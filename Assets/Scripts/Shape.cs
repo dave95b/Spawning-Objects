@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NaughtyAttributes;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,6 +19,9 @@ namespace Core
         public int Id => id;
 
         public int Count => renderers.Length;
+
+        [ReadOnly]
+        public float Scale;
 
 
         private static int colorPropertyId = Shader.PropertyToID("_Color");

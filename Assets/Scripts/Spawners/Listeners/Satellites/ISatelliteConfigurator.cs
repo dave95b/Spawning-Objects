@@ -7,6 +7,6 @@ namespace Core.Spawners.Listeners.Satellites
     public interface ISatelliteConfigurator
     {
         void Configure(Shape shape, List<Shape> satellites);
-        void OnDespawned(Shape shape, List<Shape> satellites);
+        void OnDespawned(Shape satellite);
     }
 }

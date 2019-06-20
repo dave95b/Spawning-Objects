@@ -22,9 +22,9 @@ namespace Core.Spawners.Listeners
             {
                 Color.RGBToHSV(baseColor, out float hue, out float saturation, out float value);
 
-                float randomHue = hueRange.RandomRange;
-                float randomSaturation = saturationRange.RandomRange;
-                float randomValue = valueRange.RandomRange;
+                float randomHue = hueRange.Random;
+                float randomSaturation = saturationRange.Random;
+                float randomValue = valueRange.Random;
 
                 return Random.ColorHSV(
                                 hueMin: hue - randomHue,
