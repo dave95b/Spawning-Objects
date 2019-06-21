@@ -27,7 +27,8 @@ namespace Core.Spawners.Listeners
 
             var data = new OscillationData(oscillationOffset * offset.Random, frequency.Random);
 
-            system.AddData(spawned.transform, data);
+            if (data.Offset != Vector3.zero)
+                system.AddData(spawned.transform, data);
         }
 
         protected override void DoOnDespawned(Shape despawned)

@@ -28,7 +28,7 @@ namespace Systems
 
         protected virtual void Awake()
         {
-            transforms = new TransformAccessArray(128);
+            transforms = new TransformAccessArray(128, 12);
             dataList = new NativeList<T>(128, Allocator.Persistent);
         }
 

@@ -12,18 +12,19 @@ namespace Systems
     public class SatelliteSystem : GameSystem<SatelliteData>
     {
         private TransformAccessArray planets;
-        private NativeList<Vector3> planetPositions;
+        private NativeList<float3> planetPositions, satellitePositions;
 
         protected override void Awake()
         {
             base.Awake();
-            planets = new TransformAccessArray(128);
-            planetPositions = new NativeList<Vector3>(128, Allocator.Persistent);
+            planets = new TransformAccessArray(128, 12);
+            planetPositions = new NativeList<float3>(128, Allocator.Persistent);
+            satellitePositions = new NativeList<float3>(128, Allocator.Persistent);
         }
         
         public override void OnUpdate(ref JobHandle inputHandle)
         {
-            var positionsJob = new PlanetPositionsJob
+            var planetPositionsJob = new PlanetPositionsJob
             {
                 PlanetPositions = planetPositions
             };
@@ -32,11 +33,18 @@ namespace Systems
             {
                 Data = dataList,
                 PlanetPositions = planetPositions,
-                Time = Time.time
+                Time = Time.time,
+                SatellitePositions = satellitePositions
             };
 
-            inputHandle = positionsJob.Schedule(planets, inputHandle);
-            inputHandle = satelliteJob.Schedule(transforms, inputHandle);
+            var satellitePositionsJob = new SatellitePositionsJob
+            {
+                SatellitePositions = satellitePositions
+            };
+
+            inputHandle = planetPositionsJob.Schedule(planets, inputHandle);
+            inputHandle = satelliteJob.Schedule(satellitePositions.Length, 256, inputHandle);
+            inputHandle = satellitePositionsJob.Schedule(transforms, inputHandle);
         }
 
         public void AddData(Transform satellite, Transform planet, in SatelliteData data)
@@ -44,7 +52,8 @@ namespace Systems
             if (AddData(satellite, data))
             {
                 planets.Add(planet);
-                planetPositions.Add(Vector3.zero);
+                planetPositions.Add(float3.zero);
+                satellitePositions.Add(float3.zero);
             }
         }
 
@@ -54,12 +63,14 @@ namespace Systems
 
             planets.RemoveAtSwapBack(index);
             planetPositions.RemoveAtSwapBack(index);
+            satellitePositions.RemoveAtSwapBack(index);
         }
 
         protected override void OnDestroy()
         {
             planets.Dispose();
             planetPositions.Dispose();
+            satellitePositions.Dispose();
             base.OnDestroy();
         }
     }
@@ -67,19 +78,15 @@ namespace Systems
     public readonly struct SatelliteData
     {
         public readonly float Frequency;
-        public readonly Vector3 SinOffset, CosOffset;
+        public readonly float3 SinOffset, CosOffset;
 
         public SatelliteData(float frequency, float radius, Vector3 orbitAxis)
         {
             Frequency = frequency;
-            SinOffset = Vector3.forward * radius;
+            SinOffset = new float3(0, 0, 1) * radius;
 
-            do
-            {
-                CosOffset = Vector3.Cross(orbitAxis, UnityEngine.Random.onUnitSphere).normalized;
-            }
-            while (CosOffset.sqrMagnitude < 0.1f);
-
+            CosOffset = math.cross(orbitAxis, UnityEngine.Random.onUnitSphere);
+            CosOffset = math.normalize(CosOffset);
             CosOffset *= radius;
         }
     }
@@ -88,7 +95,7 @@ namespace Systems
     struct PlanetPositionsJob : IJobParallelForTransform
     {
         [WriteOnly]
-        public NativeArray<Vector3> PlanetPositions;
+        public NativeArray<float3> PlanetPositions;
 
         public void Execute(int index, TransformAccess planet)
         {
@@ -98,23 +105,38 @@ namespace Systems
 
 
     [BurstCompile(FloatPrecision.Low, FloatMode.Fast)]
-    struct SatelliteJob : IJobParallelForTransform
+    struct SatelliteJob : IJobParallelFor
     {
         [ReadOnly]
         public NativeArray<SatelliteData> Data;
 
         [ReadOnly]
-        public NativeArray<Vector3> PlanetPositions;
+        public NativeArray<float3> PlanetPositions;
 
         [ReadOnly]
         public float Time;
 
-        public void Execute(int index, TransformAccess transform)
+        [WriteOnly]
+        public NativeArray<float3> SatellitePositions;
+
+        public void Execute(int index)
         {
             var data = Data[index];
             float t = 2f * math.PI * data.Frequency * Time;
 
-            transform.position = PlanetPositions[index] + data.CosOffset * math.cos(t) + data.SinOffset * math.sin(t);
+            SatellitePositions[index] = PlanetPositions[index] + data.CosOffset * math.cos(t) + data.SinOffset * math.sin(t);
+        }
+    }
+
+    [BurstCompile]
+    struct SatellitePositionsJob : IJobParallelForTransform
+    {
+        [ReadOnly]
+        public NativeArray<float3> SatellitePositions;
+
+        public void Execute(int index, TransformAccess satellite)
+        {
+            satellite.position = SatellitePositions[index];
         }
     }
 }

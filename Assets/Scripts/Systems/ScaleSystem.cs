@@ -107,7 +107,7 @@ namespace Systems
         }
     }
 
-    [BurstCompile]
+    [BurstCompile(FloatPrecision.Low, FloatMode.Fast)]
     struct CalculateScaleJob : IJobParallelFor
     {
         [ReadOnly]

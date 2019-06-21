@@ -36,7 +36,7 @@ namespace Systems
         }
     }
 
-    [BurstCompile]
+    [BurstCompile(FloatPrecision.Low, FloatMode.Fast)]
     struct OscillateJob : IJobParallelForTransform
     {
         [NativeDisableParallelForRestriction]
