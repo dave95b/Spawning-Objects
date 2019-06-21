@@ -14,8 +14,6 @@ namespace Systems
         private TransformAccessArray planets;
         private NativeList<Vector3> planetPositions;
 
-        private List<Transform> planetsToAdd = new List<Transform>(32);
-
         protected override void Awake()
         {
             base.Awake();
@@ -44,21 +42,13 @@ namespace Systems
         public void AddData(Transform satellite, Transform planet, in SatelliteData data)
         {
             if (AddData(satellite, data))
-                planetsToAdd.Add(planet);
+            {
+                planets.Add(planet);
+                planetPositions.Add(Vector3.zero);
+            }
         }
 
-        protected override void OnAddScheduled(in Pair pair)
-        {
-            int last = planetsToAdd.Count - 1;
-            var planet = planetsToAdd[last];
-
-            planets.Add(planet);
-            planetPositions.Add(Vector3.zero);
-
-            planetsToAdd.RemoveAt(last);
-        }
-
-        protected override void OnRemoveScheduled(Transform transform, int index)
+        protected override void OnRemove(int index)
         {
             Assert.AreEqual(planets.length, transformPositions.Count);
 

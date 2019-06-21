@@ -15,9 +15,6 @@ namespace Systems
         private NativeList<float> times, durations, scales;
         private NativeList<int> finishedIndices;
 
-        private List<float> durationsToAdd = new List<float>(128);
-        private List<Action> actionsToAdd = new List<Action>(32);
-
         private List<Action> onFinishedActions = new List<Action>(32);
         private List<Action> toInvoke = new List<Action>(32);
 
@@ -37,8 +34,10 @@ namespace Systems
             var data = new ScaleSystemData(startScale, endScale);
             if (AddData(transform, data))
             {
-                durationsToAdd.Add(duration);
-                actionsToAdd.Add(onFinished);
+                times.Add(0f);
+                scales.Add(transform.localScale.x);
+                durations.Add(duration);
+                onFinishedActions.Add(onFinished);
             }
         }
 
@@ -64,8 +63,6 @@ namespace Systems
 
         public override void OnLateUpdate()
         {
-            base.OnLateUpdate();
-
             var findFinishedJob = new FindFinishedJob
             {
                 Durations = durations,
@@ -89,22 +86,7 @@ namespace Systems
             toInvoke.Clear();
         }
 
-
-        protected override void OnAddScheduled(in Pair pair)
-        {
-            times.Add(0f);
-            scales.Add(pair.Transform.localScale.x);
-
-            int last = durationsToAdd.Count - 1;
-
-            durations.Add(durationsToAdd[last]);
-            durationsToAdd.RemoveAt(last);
-
-            onFinishedActions.Add(actionsToAdd[last]);
-            actionsToAdd.RemoveAt(last);
-        }
-
-        protected override void OnRemoveScheduled(Transform transform, int index)
+        protected override void OnRemove(int index)
         {
             Assert.AreEqual(times.Length, transformPositions.Count);
 

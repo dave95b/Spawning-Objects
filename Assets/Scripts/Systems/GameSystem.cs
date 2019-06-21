@@ -12,7 +12,7 @@ namespace Systems
     public abstract class GameSystem : MonoBehaviour
     {
         public abstract JobHandle OnUpdate(JobHandle inputHandle);
-        public abstract void OnLateUpdate();
+        public virtual void OnLateUpdate() { }
     }
 
     public abstract class GameSystem<T> : GameSystem where T : struct
@@ -21,10 +21,6 @@ namespace Systems
         protected NativeList<T> dataList;
 
         protected Dictionary<Transform, int> transformPositions = new Dictionary<Transform, int>(new TransformComparer());
-
-        protected List<Pair> toAdd = new List<Pair>(32);
-        protected List<Transform> toRemove = new List<Transform>(32);
-        protected HashSet<Transform> toRemoveSet = new HashSet<Transform>(new TransformComparer());
 
         [ShowNativeProperty]
         private int DataCount => dataList.IsCreated ? dataList.Length : -1;
@@ -36,116 +32,54 @@ namespace Systems
             dataList = new NativeList<T>(128, Allocator.Persistent);
         }
 
-        public override void OnLateUpdate()
-        {
-            RemoveScheduled();
-            AddScheduled();
-        }
-
-
         public bool AddData(Transform transform, T data)
         {
-            if (transformPositions.ContainsKey(transform) && !toRemoveSet.Contains(transform))
+            Assert.AreEqual(transforms.length, transformPositions.Count);
+
+            if (transformPositions.ContainsKey(transform))
                 return false;
 
-            var pair = new Pair(transform, data);
-            toAdd.Add(pair);
+            int index = dataList.Length;
+            transformPositions[transform] = index;
+
+            transforms.Add(transform);
+            dataList.Add(data);
+
+            Assert.AreEqual(transforms.length, transformPositions.Count);
 
             return true;
         }
 
         public virtual void Remove(Transform transform)
         {
+            Assert.AreEqual(transforms.length, transformPositions.Count);
+
             if (!transformPositions.ContainsKey(transform))
                 return;
 
-            if (toRemoveSet.Add(transform))
-                toRemove.Add(transform);
-        }
+            int index = transformPositions[transform];
+            OnRemove(index);
 
-        private void AddScheduled()
-        {
-            Assert.AreEqual(transforms.length, transformPositions.Count);
-
-            for (int i = toAdd.Count - 1; i >= 0; i--)
+            if (transforms.length > 0)
             {
-                var pair = toAdd[i];
-                int index = dataList.Length;
-                transformPositions[pair.Transform] = index;
-
-                transforms.Add(pair.Transform);
-                dataList.Add(pair.Data);
-
-                OnAddScheduled(pair);
+                Transform last = transforms[transforms.length - 1];
+                transformPositions[last] = index;
             }
 
-            toAdd.Clear();
+            transforms.RemoveAtSwapBack(index);
+            dataList.RemoveAtSwapBack(index);
+
+            transformPositions.Remove(transform);
+
             Assert.AreEqual(transforms.length, transformPositions.Count);
         }
 
-        private void RemoveScheduled()
-        {
-            Assert.AreEqual(transforms.length, transformPositions.Count);
-
-            foreach (var transform in toRemove)
-            {
-                int index = transformPositions[transform];
-                OnRemoveScheduled(transform, index);
-
-                if (transforms.length > 0)
-                {
-                    Transform last = transforms[transforms.length - 1];
-                    transformPositions[last] = index;
-                }
-
-                transforms.RemoveAtSwapBack(index);
-                dataList.RemoveAtSwapBack(index);
-
-                transformPositions.Remove(transform);
-            }
-
-            toRemove.Clear();
-            toRemoveSet.Clear();
-            Assert.AreEqual(transforms.length, transformPositions.Count);
-        }
-
-        protected abstract void OnAddScheduled(in Pair pair);
-        protected abstract void OnRemoveScheduled(Transform transform, int index);
+        protected virtual void OnRemove(int index) { }
 
         protected virtual void OnDestroy()
         {
             transforms.Dispose();
             dataList.Dispose();
-        }
-
-        protected struct Pair : IEquatable<Pair>
-        {
-            public Transform Transform;
-            public T Data;
-
-            public Pair(Transform transform, T data)
-            {
-                Transform = transform;
-                Data = data;
-            }
-
-            public bool Equals(Pair other)
-            {
-                return Transform == other.Transform;
-            }
-
-            public override bool Equals(object obj)
-            {
-                if (obj is Pair other)
-                    return Equals(other);
-
-                return false;
-            }
-
-            public override int GetHashCode()
-            {
-                return Transform.GetHashCode();
-            }
         }
     }
 
