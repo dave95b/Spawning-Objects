@@ -21,10 +21,7 @@ namespace Core
         private IEnumerator CreateDelayed()
         {
             yield return null;
-            yield return null;
-            yield return null;
-            yield return null;
-            yield return null;
+            yield return new WaitForEndOfFrame();
             game.Create(count);
         }
     }

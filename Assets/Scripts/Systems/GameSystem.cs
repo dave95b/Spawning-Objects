@@ -34,6 +34,9 @@ namespace Systems
 
         public bool AddData(Transform transform, T data)
         {
+            if (!transform.gameObject.activeInHierarchy)
+                return false;
+
             Assert.AreEqual(transforms.length, transformPositions.Count);
 
             if (transformPositions.ContainsKey(transform))

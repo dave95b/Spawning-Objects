@@ -48,6 +48,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   renderers:
   - {fileID: 761371747888981801}
+  enableCollider: 1
+  Scale: 0
 --- !u!114 &-757099784865988454
 MonoBehaviour:
   m_ObjectHideFlags: 0

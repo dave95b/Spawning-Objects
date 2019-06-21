@@ -6,6 +6,7 @@ using SpawnerSystem.Spawners;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
 using Systems;
+using Utilities;
 
 namespace Core
 {
@@ -14,26 +15,15 @@ namespace Core
         [SerializeField]
         private ShapeSpawnerPreparer spawnerPreparer;
 
-        [SerializeField, FloatRangeSlider(0.1f, 2f)]
-        private FloatRange shrinkDuration;
-
         [SerializeField]
-        private ScaleSystem scaleSystem;
+        private ShapeKiller killer;
 
 
         private Spawner<Shape> Spawner => spawnerPreparer.Spawner;
         private List<Shape> shapes = new List<Shape>(36);
 
-        private ActionSource<Shape> actionSource;
-
         [ShowNativeProperty]
         private int ShapeCount => shapes.Count;
-
-
-        private void Awake()
-        {
-            actionSource = new ActionSource<Shape>((shape) => () => Spawner.Despawn(shape));    
-        }
 
 
         public void Create()
@@ -52,7 +42,7 @@ namespace Core
         public void RemoveAll()
         {
             foreach (var shape in shapes)
-                Remove(shape);
+                killer.Kill(shape);
             shapes.Clear();
         }
 
@@ -63,16 +53,8 @@ namespace Core
 
             int index = Random.Range(0, shapes.Count);
             var shape = shapes[index];
-            Remove(shape);
+            killer.Kill(shape);
             shapes.RemoveAtSwapback(index);
-        }
-
-        private void Remove(Shape shape)
-        {
-            scaleSystem.Remove(shape.transform);
-
-            float scale = shape.transform.localScale.x;
-            scaleSystem.AddData(shape.transform, shrinkDuration.Random, scale, endScale: 0f, actionSource[shape]);
         }
     }
 }

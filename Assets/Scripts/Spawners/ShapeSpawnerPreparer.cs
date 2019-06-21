@@ -19,5 +19,27 @@ namespace Core.Spawners
                 return new List<ISpawnListener<Shape>>(listeners);
             }
         }
+
+        private void Start()
+        {
+            Spawner.AddListener(new SpawnerSetter(Spawner));
+        }
+    }
+
+    class SpawnerSetter : ISpawnListener<Shape>
+    {
+        private readonly Spawner<Shape> spawner;
+
+        public SpawnerSetter(Spawner<Shape> spawner)
+        {
+            this.spawner = spawner;
+        }
+
+        public void OnSpawned(Shape spawned)
+        {
+            spawned.Spawner = spawner;
+        }
+
+        public void OnDespawned(Shape despawned) { }
     }
 }

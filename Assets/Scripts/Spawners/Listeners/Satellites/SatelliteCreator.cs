@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using SpawnerSystem.Spawners;
 using Systems;
 using System.Collections;
+using Utilities;
 
 namespace Core.Spawners.Listeners.Satellites
 {
@@ -18,7 +19,7 @@ namespace Core.Spawners.Listeners.Satellites
         private FloatRange scale;
 
         [SerializeField, FloatRangeSlider(0.1f, 2f)]
-        private FloatRange scaleDuration;
+        private FloatRange growDuration, shrinkDuration;
 
         [SerializeField]
         private ShapeSpawnerPreparer spawnerPreparer;
@@ -61,7 +62,7 @@ namespace Core.Spawners.Listeners.Satellites
             {
                 Shape satellite = SpawnSatelliteFor(spawned);
                 list.Add(satellite);
-                scaleSystem.AddData(satellite.transform, scaleDuration.Random, 0f, satellite.Scale, spawnedActionSource[satellite]);
+                scaleSystem.AddData(satellite.transform, growDuration.Random, 0f, satellite.Scale, spawnedActionSource[satellite]);
             }
 
             foreach (var configurator in configurators)
@@ -77,7 +78,7 @@ namespace Core.Spawners.Listeners.Satellites
                 var transform = satellite.transform;
                 
                 scaleSystem.Remove(transform);
-                scaleSystem.AddData(transform, scaleDuration.Random, transform.localScale.x, endScale: 0f, despawnedActionSource[satellite]);
+                scaleSystem.AddData(transform, shrinkDuration.Random, transform.localScale.x, endScale: 0f, despawnedActionSource[satellite]);
 
                 StartCoroutine(EjectFromOrbit(satellite));
             }

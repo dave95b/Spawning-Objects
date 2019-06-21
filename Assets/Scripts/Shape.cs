@@ -1,4 +1,5 @@
 ﻿using NaughtyAttributes;
+using SpawnerSystem.Spawners;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,15 +15,21 @@ namespace Core
 
         [SerializeField]
         private bool enableCollider;
+        public bool EnableCollider => enableCollider;
+
+        [ReadOnly]
+        public float Scale;
 
         private int id;
         public int Id => id;
 
         public int Count => renderers.Length;
 
-        [ReadOnly]
-        public float Scale;
+        private Collider collider;
+        public Collider Collider => collider;
 
+
+        public Spawner<Shape> Spawner;
 
         private static int colorPropertyId = Shader.PropertyToID("_Color");
         private static MaterialPropertyBlock propertyBlock;
@@ -32,7 +39,7 @@ namespace Core
         {
             id = GetInstanceID();
 
-            var collider = GetComponent<Collider>();
+            collider = GetComponent<Collider>();
             collider.enabled = enableCollider;
         }
 

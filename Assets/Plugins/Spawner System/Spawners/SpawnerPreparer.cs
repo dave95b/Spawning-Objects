@@ -17,7 +17,6 @@ namespace SpawnerSystem.Spawners
         private SelectorProvider selectorProvider;
 
         protected abstract MultiPoolPreparer<T> PoolPreparer { get; }
-        //protected abstract SpawnListenerRepository<T> ListenerRepository { get; }
         protected virtual List<ISpawnListener<T>> SpawnListeners { get; }
 
         private Spawner<T> spawner;
