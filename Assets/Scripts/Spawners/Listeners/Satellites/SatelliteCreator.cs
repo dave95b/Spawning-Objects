@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using SpawnerSystem.Spawners;
 using Systems;
+using System.Collections;
 
 namespace Core.Spawners.Listeners.Satellites
 {
@@ -35,8 +36,6 @@ namespace Core.Spawners.Listeners.Satellites
 
         private Dictionary<Shape, List<Shape>> satellites = new Dictionary<Shape, List<Shape>>();
         private ISatelliteConfigurator[] configurators;
-
-        private List<SatelliteData> scheduled = new List<SatelliteData>(64);
 
         private ActionSource<Shape> spawnedActionSource, despawnedActionSource;
 
@@ -76,12 +75,11 @@ namespace Core.Spawners.Listeners.Satellites
             foreach (var satellite in shapeSatellites)
             {
                 var transform = satellite.transform;
-                var position = new SatelliteData(satellite, transform.localPosition);
-                scheduled.Add(position);
-                satelliteSystem.Remove(transform);
-
+                
                 scaleSystem.Remove(transform);
                 scaleSystem.AddData(transform, scaleDuration.Random, transform.localScale.x, endScale: 0f, despawnedActionSource[satellite]);
+
+                StartCoroutine(EjectFromOrbit(satellite));
             }
 
             shapeSatellites.Clear();
@@ -97,20 +95,6 @@ namespace Core.Spawners.Listeners.Satellites
             Spawner.Despawn(satellite);
         }
 
-        private void LateUpdate()
-        {
-            float deltaTime = Time.deltaTime;
-            foreach (var data in scheduled)
-            {
-                Shape satellite = data.Satellite;
-                Vector3 velocity = (satellite.transform.localPosition - data.Position) / deltaTime;
-
-                moveSystem.AddData(satellite.transform, velocity);
-            }
-
-            scheduled.Clear();
-        }
-
 
         private Shape SpawnSatelliteFor(Shape shape)
         {
@@ -122,17 +106,14 @@ namespace Core.Spawners.Listeners.Satellites
             return satellite;
         }
 
-
-        struct SatelliteData
+        private IEnumerator EjectFromOrbit(Shape satellite)
         {
-            public Shape Satellite;
-            public Vector3 Position;
+            Vector3 position = satellite.transform.localPosition;
+            yield return null;
+            Vector3 velocity = (satellite.transform.localPosition - position) / Time.deltaTime;
+            satelliteSystem.Remove(satellite.transform);
 
-            public SatelliteData(Shape satellite, Vector3 position)
-            {
-                Satellite = satellite;
-                Position = position;
-            }
+            moveSystem.AddData(satellite.transform, velocity);
         }
     }
 }

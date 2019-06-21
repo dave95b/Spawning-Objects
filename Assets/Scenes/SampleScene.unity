@@ -199,7 +199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   game: {fileID: 76961942}
-  createCount: 20
+  createCount: 50
   createKey: 99
   removeAllKey: 114
   removeRandomKey: 118
@@ -216,7 +216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   game: {fileID: 76961942}
-  count: 1
+  count: 50
 --- !u!1 &232183892
 GameObject:
   m_ObjectHideFlags: 0
@@ -925,8 +925,8 @@ MonoBehaviour:
     min: 0.5
     max: 1.5
   scale:
-    min: 0.55
-    max: 0.75
+    min: 0.4
+    max: 0.6
   scaleDuration:
     min: 1.5
     max: 2
