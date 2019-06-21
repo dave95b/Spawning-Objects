@@ -41,7 +41,7 @@ namespace Systems
             }
         }
 
-        public override JobHandle OnUpdate(JobHandle inputHandle)
+        public override void OnUpdate(ref JobHandle inputHandle)
         {
             var scaleJob = new CalculateScaleJob
             {
@@ -58,7 +58,7 @@ namespace Systems
             };
 
             inputHandle = scaleJob.Schedule(dataList.Length, 512, inputHandle);
-            return applyJob.Schedule(transforms, inputHandle);
+            inputHandle = applyJob.Schedule(transforms, inputHandle);
         }
 
         public override void OnLateUpdate()

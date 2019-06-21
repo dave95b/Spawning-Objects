@@ -11,7 +11,7 @@ namespace Systems
 {
     public abstract class GameSystem : MonoBehaviour
     {
-        public abstract JobHandle OnUpdate(JobHandle inputHandle);
+        public abstract void OnUpdate(ref JobHandle inputHandle);
         public virtual void OnLateUpdate() { }
     }
 

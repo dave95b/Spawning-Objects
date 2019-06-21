@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using SpawnerSystem.Spawners;
 using NaughtyAttributes;
+using Utilities;
 
 namespace Core.Spawners.Zones
 {
@@ -11,9 +12,7 @@ namespace Core.Spawners.Zones
 
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.cyan;
-            Gizmos.matrix = transform.localToWorldMatrix;
-            Gizmos.DrawWireSphere(Vector3.zero, 1f);
+            GizmoDrawer.Draw(transform, Color.cyan, GizmoType.Shpere);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Systems
 {
     public class OscillationSystem : GameSystem<OscillationData>
     {
-        public override JobHandle OnUpdate(JobHandle inputHandle)
+        public override void OnUpdate(ref JobHandle inputHandle)
         {
             var job = new OscillateJob
             {
@@ -18,7 +18,7 @@ namespace Systems
                 Time = Time.time
             };
 
-            return job.Schedule(transforms, inputHandle);
+            inputHandle = job.Schedule(transforms, inputHandle);
         }
     }
 

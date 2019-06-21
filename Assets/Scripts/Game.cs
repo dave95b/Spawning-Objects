@@ -13,6 +13,9 @@ namespace Core
     public class Game : MonoBehaviour
     {
         [SerializeField]
+        private int createPerFrame = 15, removePerFrame = 30;
+
+        [SerializeField]
         private ShapeSpawnerPreparer spawnerPreparer;
 
         [SerializeField]
@@ -35,8 +38,7 @@ namespace Core
         public void Create(int count)
         {
             Assert.IsTrue(count >= 0);
-            for (int i = 0; i < count; i++)
-                Create();
+            StartCoroutine(CreateCoroutine(count));
         }
 
         public void RemoveAll()
@@ -55,6 +57,20 @@ namespace Core
             var shape = shapes[index];
             killer.Kill(shape);
             shapes.RemoveAtSwapback(index);
+        }
+
+        private IEnumerator CreateCoroutine(int count)
+        {
+            while (count > 0)
+            {
+                int toCreate = Mathf.Min(count, createPerFrame);
+
+                for (int i = 0; i < toCreate; i++)
+                    Create();
+
+                count -= toCreate;
+                yield return null;
+            }
         }
     }
 }

@@ -50,13 +50,15 @@ namespace Core.Spawners.Listeners.Satellites
 
         protected override void DoOnSpawned(Shape spawned)
         {
+            int count = (int)amount.Random;
+            if (count == 0)
+                return;
+
             if (!satellites.TryGetValue(spawned, out var list))
             {
                 list = new List<Shape>(5);
                 satellites[spawned] = list;
             }
-
-            int count = (int)amount.Random;
 
             for (int i = 0; i < count; i++)
             {
@@ -71,7 +73,8 @@ namespace Core.Spawners.Listeners.Satellites
 
         protected override void DoOnDespawned(Shape despawned)
         {
-            var shapeSatellites = satellites[despawned];
+            if (!satellites.TryGetValue(despawned, out var shapeSatellites))
+                return;
 
             foreach (var satellite in shapeSatellites)
             {

@@ -10,7 +10,7 @@ namespace Systems
 {
     public class RotationSystem : GameSystem<Vector3>
     {
-        public override JobHandle OnUpdate(JobHandle inputHandle)
+        public override void OnUpdate(ref JobHandle inputHandle)
         {
             var job = new RotateJob
             {
@@ -18,7 +18,7 @@ namespace Systems
                 DeltaTime = Time.deltaTime
             };
 
-            return job.Schedule(transforms, inputHandle);
+            inputHandle = job.Schedule(transforms, inputHandle);
         }
     }
 

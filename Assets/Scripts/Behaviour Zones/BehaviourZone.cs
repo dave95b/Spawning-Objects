@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using NaughtyAttributes;
+using Utilities;
 
 namespace Core.BehaviourZones
 {
@@ -9,6 +10,8 @@ namespace Core.BehaviourZones
     {
         [SerializeField, ReadOnly]
         private Collider collider;
+
+        protected abstract Color GizmoColor { get; }
 
         private void Awake()
         {
@@ -45,6 +48,11 @@ namespace Core.BehaviourZones
             collider = GetComponent<Collider>();
             if (collider != null)
                 collider.isTrigger = true;
+        }
+
+        private void OnDrawGizmos()
+        {
+            GizmoDrawer.Draw(collider, GizmoColor);
         }
     }
 }

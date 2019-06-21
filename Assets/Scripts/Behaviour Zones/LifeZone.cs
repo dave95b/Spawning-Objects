@@ -9,6 +9,8 @@ namespace Core.BehaviourZones
         [SerializeField]
         private ShapeKiller killer;
 
+        protected override Color GizmoColor => Color.green;
+
         protected override void OnShapeEnter(Shape shape) { }
 
         protected override void OnShapeExit(Shape shape)

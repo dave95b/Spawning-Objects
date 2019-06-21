@@ -15,7 +15,7 @@ namespace Systems
         private void Update()
         {
             foreach (var system in systems)
-                handle = system.OnUpdate(handle);
+                system.OnUpdate(ref handle);
         }
 
         private void LateUpdate()

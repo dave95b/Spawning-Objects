@@ -10,6 +10,8 @@ namespace Core.BehaviourZones
         [SerializeField]
         private ShapeKiller killer;
 
+        protected override Color GizmoColor => Color.red;
+
         protected override void OnShapeEnter(Shape shape)
         {
             shape.Collider.enabled = false;

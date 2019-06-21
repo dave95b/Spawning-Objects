@@ -21,7 +21,7 @@ namespace Systems
             planetPositions = new NativeList<Vector3>(128, Allocator.Persistent);
         }
         
-        public override JobHandle OnUpdate(JobHandle inputHandle)
+        public override void OnUpdate(ref JobHandle inputHandle)
         {
             var positionsJob = new PlanetPositionsJob
             {
@@ -36,7 +36,7 @@ namespace Systems
             };
 
             inputHandle = positionsJob.Schedule(planets, inputHandle);
-            return satelliteJob.Schedule(transforms, inputHandle);
+            inputHandle = satelliteJob.Schedule(transforms, inputHandle);
         }
 
         public void AddData(Transform satellite, Transform planet, in SatelliteData data)

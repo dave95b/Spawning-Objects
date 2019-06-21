@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Utilities;
 
 namespace Core.Spawners.Zones
 {
@@ -22,9 +23,7 @@ namespace Core.Spawners.Zones
 
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.cyan;
-            Gizmos.matrix = transform.localToWorldMatrix;
-            Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
+            GizmoDrawer.Draw(transform, Color.cyan, GizmoType.Box);
         }
     }
 }
