@@ -1,21 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Utilities;
-using UnityEngine.Assertions;
 
 namespace Core.BehaviourZones
 {
-    public class KillZone : BehaviourZone
+    public class LifeZone : BehaviourZone
     {
         [SerializeField]
         private ShapeKiller killer;
 
-        protected override void OnShapeEnter(Shape shape)
+        protected override void OnShapeEnter(Shape shape) { }
+
+        protected override void OnShapeExit(Shape shape)
         {
             shape.Collider.enabled = false;
             killer.Kill(shape);
         }
-
-        protected override void OnShapeExit(Shape shape) { }
     }
 }
