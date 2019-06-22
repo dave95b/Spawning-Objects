@@ -9,15 +9,17 @@ using UnityEngine.Assertions;
 
 namespace Systems
 {
-    public class SatelliteSystem : GameSystem<SatelliteData>
+    public class SatelliteSystem : GameSystem<SatelliteSystemData>
     {
         private TransformAccessArray planets;
+        private NativeList<SatelliteData> data;
         private NativeList<float3> planetPositions, satellitePositions;
 
         protected override void Awake()
         {
             base.Awake();
             planets = new TransformAccessArray(128, 12);
+            data = new NativeList<SatelliteData>(128, Allocator.Persistent);
             planetPositions = new NativeList<float3>(128, Allocator.Persistent);
             satellitePositions = new NativeList<float3>(128, Allocator.Persistent);
         }
@@ -31,7 +33,7 @@ namespace Systems
 
             var satelliteJob = new SatelliteJob
             {
-                Data = dataList,
+                Data = data,
                 PlanetPositions = planetPositions,
                 Time = Time.time,
                 SatellitePositions = satellitePositions
@@ -43,24 +45,24 @@ namespace Systems
             };
 
             inputHandle = planetPositionsJob.Schedule(planets, inputHandle);
-            inputHandle = satelliteJob.Schedule(satellitePositions.Length, 256, inputHandle);
+            inputHandle = satelliteJob.Schedule(data.Length, 256, inputHandle);
             inputHandle = satellitePositionsJob.Schedule(transforms, inputHandle);
         }
 
-        public void AddData(Transform satellite, Transform planet, in SatelliteData data)
+        protected override void OnAdd(SatelliteSystemData systemData)
         {
-            if (AddData(satellite, data))
-            {
-                planets.Add(planet);
-                planetPositions.Add(float3.zero);
-                satellitePositions.Add(float3.zero);
-            }
+            var satelliteData = new SatelliteData(systemData);
+            data.Add(satelliteData);
+            planets.Add(systemData.Planet);
+            planetPositions.Add(float3.zero);
+            satellitePositions.Add(float3.zero);
         }
 
         protected override void OnRemove(int index)
         {
             Assert.AreEqual(planets.length, transformPositions.Count);
 
+            data.RemoveAtSwapBack(index);
             planets.RemoveAtSwapBack(index);
             planetPositions.RemoveAtSwapBack(index);
             satellitePositions.RemoveAtSwapBack(index);
@@ -68,6 +70,7 @@ namespace Systems
 
         protected override void OnDestroy()
         {
+            data.Dispose();
             planets.Dispose();
             planetPositions.Dispose();
             satellitePositions.Dispose();
@@ -75,19 +78,34 @@ namespace Systems
         }
     }
 
-    public readonly struct SatelliteData
+    public readonly struct SatelliteSystemData
+    {
+        public readonly float Frequency, Radius;
+        public readonly Vector3 OrbitAxis;
+        public readonly Transform Planet;
+
+        public SatelliteSystemData(float frequency, float radius, Vector3 orbitAxis, Transform planet)
+        {
+            Frequency = frequency;
+            Radius = radius;
+            OrbitAxis = orbitAxis;
+            Planet = planet;
+        }
+    }
+
+    readonly struct SatelliteData
     {
         public readonly float Frequency;
         public readonly float3 SinOffset, CosOffset;
 
-        public SatelliteData(float frequency, float radius, Vector3 orbitAxis)
+        public SatelliteData(in SatelliteSystemData data)
         {
-            Frequency = frequency;
-            SinOffset = new float3(0, 0, 1) * radius;
+            Frequency = data.Frequency;
+            SinOffset = new float3(0, 0, 1) * data.Radius;
 
-            CosOffset = math.cross(orbitAxis, UnityEngine.Random.onUnitSphere);
+            CosOffset = math.cross(data.OrbitAxis, UnityEngine.Random.onUnitSphere);
             CosOffset = math.normalize(CosOffset);
-            CosOffset *= radius;
+            CosOffset *= data.Radius;
         }
     }
 
@@ -102,7 +120,6 @@ namespace Systems
             PlanetPositions[index] = planet.position;
         }
     }
-
 
     [BurstCompile(FloatPrecision.Low, FloatMode.Fast)]
     struct SatelliteJob : IJobParallelFor

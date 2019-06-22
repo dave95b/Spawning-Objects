@@ -12,6 +12,7 @@ namespace Systems
 {
     public class ScaleSystem : GameSystem<ScaleSystemData>
     {
+        private NativeList<ScaleRanges> scaleRanges;
         private NativeList<float> times, durations, scales;
         private NativeList<int> finishedIndices;
 
@@ -21,6 +22,7 @@ namespace Systems
 
         protected override void Awake()
         {
+            scaleRanges = new NativeList<ScaleRanges>(128, Allocator.Persistent);
             times = new NativeList<float>(128, Allocator.Persistent);
             durations = new NativeList<float>(128, Allocator.Persistent);
             scales = new NativeList<float>(128, Allocator.Persistent);
@@ -29,23 +31,11 @@ namespace Systems
         }
 
 
-        public void AddData(Transform transform, float duration, float startScale, float endScale, Action onFinished = null)
-        {
-            var data = new ScaleSystemData(startScale, endScale);
-            if (AddData(transform, data))
-            {
-                times.Add(0f);
-                scales.Add(transform.localScale.x);
-                durations.Add(duration);
-                onFinishedActions.Add(onFinished);
-            }
-        }
-
         public override void OnUpdate(ref JobHandle inputHandle)
         {
             var scaleJob = new CalculateScaleJob
             {
-                Data = dataList,
+                ScaleRanges = scaleRanges,
                 Durations = durations,
                 Times = times,
                 Scales = scales,
@@ -57,7 +47,7 @@ namespace Systems
                 Scales = scales
             };
 
-            inputHandle = scaleJob.Schedule(dataList.Length, 512, inputHandle);
+            inputHandle = scaleJob.Schedule(scaleRanges.Length, 512, inputHandle);
             inputHandle = applyJob.Schedule(transforms, inputHandle);
         }
 
@@ -86,10 +76,22 @@ namespace Systems
             toInvoke.Clear();
         }
 
+        protected override void OnAdd(ScaleSystemData data)
+        {
+            var ranges = new ScaleRanges(data.StartScale, data.EndScale);
+            scaleRanges.Add(ranges);
+
+            times.Add(0f);
+            scales.Add(transform.localScale.x);
+            durations.Add(data.Duration);
+            onFinishedActions.Add(data.OnFinished);
+        }
+
         protected override void OnRemove(int index)
         {
             Assert.AreEqual(times.Length, transformPositions.Count);
 
+            scaleRanges.RemoveAtSwapBack(index);
             times.RemoveAtSwapBack(index);
             durations.RemoveAtSwapBack(index);
             scales.RemoveAtSwapBack(index);
@@ -99,6 +101,7 @@ namespace Systems
 
         protected override void OnDestroy()
         {
+            scaleRanges.Dispose();
             times.Dispose();
             durations.Dispose();
             scales.Dispose();
@@ -111,7 +114,7 @@ namespace Systems
     struct CalculateScaleJob : IJobParallelFor
     {
         [ReadOnly]
-        public NativeArray<ScaleSystemData> Data;
+        public NativeArray<ScaleRanges> ScaleRanges;
 
         [ReadOnly]
         public NativeArray<float> Durations;
@@ -127,14 +130,14 @@ namespace Systems
 
         public void Execute(int index)
         {
-            var data = Data[index];
+            var ranges = ScaleRanges[index];
             float duration = Durations[index];
             float time = math.min(Times[index] + DeltaTime, duration);
             Times[index] = time;
 
             float t = math.unlerp(0f, duration, time);
             t = (3f - 2f * t) * t * t;
-            float scale = math.lerp(data.StartScale, data.EndScale, t);
+            float scale = math.lerp(ranges.StartScale, ranges.EndScale, t);
 
             Scales[index] = scale;
         }
@@ -175,9 +178,23 @@ namespace Systems
 
     public readonly struct ScaleSystemData
     {
+        public readonly float Duration, StartScale, EndScale;
+        public readonly Action OnFinished;
+
+        public ScaleSystemData(float duration, float startScale, float endScale, Action onFinished = null)
+        {
+            Duration = duration;
+            StartScale = startScale;
+            EndScale = endScale;
+            OnFinished = onFinished;
+        }
+    }
+
+    public readonly struct ScaleRanges
+    {
         public readonly float StartScale, EndScale;
 
-        public ScaleSystemData(float startScale, float endScale)
+        public ScaleRanges(float startScale, float endScale)
         {
             StartScale = startScale;
             EndScale = endScale;

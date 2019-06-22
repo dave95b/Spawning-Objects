@@ -25,7 +25,9 @@ namespace Core.Spawners.Listeners
             float _scale = scale.Random;
             spawned.Scale = _scale;
             spawned.transform.localScale = Vector3.zero;
-            system.AddData(spawned.transform, duration.Random, startScale: 0f, _scale, actionSource[spawned]);
+
+            var data = new ScaleSystemData(duration.Random, startScale: 0f, _scale, actionSource[spawned]);
+            system.AddData(spawned.transform, data);
         }
 
         protected override void OnShapeDespawned(Shape despawned)

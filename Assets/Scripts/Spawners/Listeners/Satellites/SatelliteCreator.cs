@@ -63,7 +63,9 @@ namespace Core.Spawners.Listeners.Satellites
             {
                 Shape satellite = SpawnSatelliteFor(spawned);
                 list.Add(satellite);
-                scaleSystem.AddData(satellite.transform, growDuration.Random, 0f, satellite.Scale, spawnedActionSource[satellite]);
+
+                var data = new ScaleSystemData(growDuration.Random, startScale: 0f, satellite.Scale, spawnedActionSource[satellite]);
+                scaleSystem.AddData(satellite.transform, data);
             }
 
             foreach (var configurator in configurators)

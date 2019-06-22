@@ -4241,7 +4241,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 720044921}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -4856,8 +4856,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInSpawnZone: 0
   amount:
-    min: 1
-    max: 1
+    min: 0
+    max: 0
   distance:
     min: 0.5
     max: 1.5
@@ -9358,8 +9358,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInSpawnZone: 0
   speed:
-    min: 1
-    max: 2
+    min: 0.5
+    max: 1
   direction: 1
   moveSystem: {fileID: 2126352231}
 --- !u!114 &1798658696
@@ -11825,6 +11825,16 @@ PrefabInstance:
       propertyPath: spawnerPreparer
       value: 
       objectReference: {fileID: 720044923}
+    - target: {fileID: 2211647473721754269, guid: 1bb19f25ecad78a4788f1c3798325485,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2211647473721754259, guid: 1bb19f25ecad78a4788f1c3798325485,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 76961941, guid: 1bb19f25ecad78a4788f1c3798325485, type: 3}
       propertyPath: system
       value: 

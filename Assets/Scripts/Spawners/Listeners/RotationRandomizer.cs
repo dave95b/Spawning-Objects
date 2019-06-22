@@ -13,8 +13,6 @@ namespace Core.Spawners.Listeners
 
         protected override void OnShapeSpawned(Shape spawned)
         {
-            spawned.transform.rotation = Random.rotation;
-
             float rotateSpeed = speed.Random;
             if (rotateSpeed != 0f)
                 rotationSystem.AddData(spawned.transform, Random.onUnitSphere * speed.Random);

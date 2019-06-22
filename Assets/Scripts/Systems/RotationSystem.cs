@@ -8,17 +8,41 @@ using Unity.Mathematics;
 
 namespace Systems
 {
-    public class RotationSystem : GameSystem<Vector3>
+    public class RotationSystem : GameSystem<float3>
     {
+        private NativeList<float3> angularVelocities;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            angularVelocities = new NativeList<float3>(128, Allocator.Persistent);
+        }
+
         public override void OnUpdate(ref JobHandle inputHandle)
         {
             var job = new RotateJob
             {
-                AngularVelocities = dataList,
+                AngularVelocities = angularVelocities,
                 DeltaTime = Time.deltaTime
             };
 
             inputHandle = job.Schedule(transforms, inputHandle);
+        }
+
+        protected override void OnAdd(float3 data)
+        {
+            angularVelocities.Add(data);
+        }
+
+        protected override void OnRemove(int index)
+        {
+            angularVelocities.RemoveAtSwapBack(index);
+        }
+
+        protected override void OnDestroy()
+        {
+            angularVelocities.Dispose();
+            base.OnDestroy();
         }
     }
 
@@ -26,7 +50,7 @@ namespace Systems
     struct RotateJob : IJobParallelForTransform
     {
         [ReadOnly]
-        public NativeArray<Vector3> AngularVelocities;
+        public NativeArray<float3> AngularVelocities;
 
         [ReadOnly]
         public float DeltaTime;

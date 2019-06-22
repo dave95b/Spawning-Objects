@@ -19,39 +19,38 @@ namespace Systems
     public abstract class GameSystem<T> : GameSystem where T : struct
     {
         protected TransformAccessArray transforms;
-        protected NativeList<T> dataList;
+        //protected NativeList<T> dataList;
 
         protected Dictionary<Transform, int> transformPositions = new Dictionary<Transform, int>(new TransformComparer());
 
         [ShowNativeProperty]
-        private int DataCount => dataList.IsCreated ? dataList.Length : -1;
+        private int DataCount => transforms.isCreated ? transforms.length : -1;
 
 
         protected virtual void Awake()
         {
             transforms = new TransformAccessArray(128, 12);
-            dataList = new NativeList<T>(128, Allocator.Persistent);
+            //dataList = new NativeList<T>(128, Allocator.Persistent);
         }
 
-        public bool AddData(Transform transform, T data)
+        public void AddData(Transform transform, T data)
         {
             if (!transform.gameObject.activeInHierarchy)
-                return false;
+                return;
 
             Assert.AreEqual(transforms.length, transformPositions.Count);
 
             if (transformPositions.ContainsKey(transform))
-                return false;
+                return;
 
-            int index = dataList.Length;
+            int index = transforms.length;
             transformPositions[transform] = index;
 
             transforms.Add(transform);
-            dataList.Add(data);
+            //dataList.Add(data);
 
+            OnAdd(data);
             Assert.AreEqual(transforms.length, transformPositions.Count);
-
-            return true;
         }
 
         public override void Remove(Transform transform)
@@ -71,19 +70,20 @@ namespace Systems
             }
 
             transforms.RemoveAtSwapBack(index);
-            dataList.RemoveAtSwapBack(index);
+            //dataList.RemoveAtSwapBack(index);
 
             transformPositions.Remove(transform);
 
             Assert.AreEqual(transforms.length, transformPositions.Count);
         }
 
-        protected virtual void OnRemove(int index) { }
+        protected abstract void OnRemove(int index);
+        protected abstract void OnAdd(T data);
 
         protected virtual void OnDestroy()
         {
             transforms.Dispose();
-            dataList.Dispose();
+            //dataList.Dispose();
         }
     }
 

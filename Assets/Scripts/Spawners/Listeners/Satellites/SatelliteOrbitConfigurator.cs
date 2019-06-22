@@ -28,8 +28,8 @@ namespace Core.Spawners.Listeners.Satellites
                 float _radius = radius.Random;
                 Vector3 _orbitAxis = Random.onUnitSphere;
 
-                var data = new SatelliteData(_frequency, _radius, _orbitAxis);
-                satelliteSystem.AddData(satellite.transform, shape.transform, data);
+                var data = new SatelliteSystemData(_frequency, _radius, _orbitAxis, shape.transform);
+                satelliteSystem.AddData(satellite.transform, data);
 
                 Vector3 angularVelocity = -360f * _frequency * shape.transform.InverseTransformDirection(_orbitAxis) + Random.insideUnitSphere * 0.25f;
                 rotationSystem.AddData(satellite.transform, angularVelocity);

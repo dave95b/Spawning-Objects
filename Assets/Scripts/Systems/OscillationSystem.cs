@@ -10,15 +10,40 @@ namespace Systems
 {
     public class OscillationSystem : GameSystem<OscillationData>
     {
+        private NativeList<OscillationData> systemData;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            systemData = new NativeList<OscillationData>(128, Allocator.Persistent);
+        }
+
+
         public override void OnUpdate(ref JobHandle inputHandle)
         {
             var job = new OscillateJob
             {
-                Data = dataList,
+                Data = systemData,
                 Time = Time.time
             };
 
             inputHandle = job.Schedule(transforms, inputHandle);
+        }
+
+        protected override void OnAdd(OscillationData data)
+        {
+            systemData.Add(data);
+        }
+
+        protected override void OnRemove(int index)
+        {
+            systemData.RemoveAtSwapBack(index);
+        }
+
+        protected override void OnDestroy()
+        {
+            systemData.Dispose();
+            base.OnDestroy();
         }
     }
 
@@ -28,7 +53,7 @@ namespace Systems
         public Vector3 Offset;
         public float Frequency, PreviousOscillation;
 
-        public OscillationData(Vector3 offset, float frequency) : this()
+        public OscillationData(Vector3 offset, float frequency)
         {
             Offset = offset;
             Frequency = frequency;

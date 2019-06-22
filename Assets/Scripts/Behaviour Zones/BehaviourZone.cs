@@ -41,6 +41,9 @@ namespace Core.BehaviourZones
         private void Reset()
         {
             SetupCollider();
+            var rigidbody = GetComponent<Rigidbody>();
+            rigidbody.useGravity = false;
+            rigidbody.isKinematic = true;
         }
 
         private void SetupCollider()
@@ -52,7 +55,8 @@ namespace Core.BehaviourZones
 
         private void OnDrawGizmos()
         {
-            GizmoDrawer.Draw(collider, GizmoColor);
+            if (collider != null)
+                GizmoDrawer.Draw(collider, GizmoColor);
         }
     }
 }

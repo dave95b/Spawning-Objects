@@ -32,7 +32,9 @@ namespace Utilities
             system.Remove(shape.transform);
 
             float scale = shape.transform.localScale.x;
-            system.AddData(shape.transform, duration.Random, scale, endScale: 0f, actionSource[shape]);
+
+            var data = new ScaleSystemData(duration.Random, scale, endScale: 0f, actionSource[shape]);
+            system.AddData(shape.transform, data);
         }
     }
 }
