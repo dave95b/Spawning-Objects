@@ -20,7 +20,11 @@ namespace Utilities
 
         private void Awake()
         {
-            actionSource = new ActionSource<Shape>((shape) => () => shape.Spawner.Despawn(shape));
+            actionSource = new ActionSource<Shape>((shape) => () =>
+            {
+                system.Remove(shape.transform);
+                shape.Spawner.Despawn(shape);
+            });
         }
 
         public void Kill(Shape shape)

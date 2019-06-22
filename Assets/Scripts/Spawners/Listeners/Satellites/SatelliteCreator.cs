@@ -19,7 +19,7 @@ namespace Core.Spawners.Listeners.Satellites
         private FloatRange scale;
 
         [SerializeField, FloatRangeSlider(0.1f, 2f)]
-        private FloatRange growDuration, shrinkDuration;
+        private FloatRange growDuration;
 
         [SerializeField]
         private ShapeSpawnerPreparer spawnerPreparer;
@@ -38,13 +38,12 @@ namespace Core.Spawners.Listeners.Satellites
         private Dictionary<Shape, List<Shape>> satellites = new Dictionary<Shape, List<Shape>>();
         private ISatelliteConfigurator[] configurators;
 
-        private ActionSource<Shape> spawnedActionSource, despawnedActionSource;
+        private ActionSource<Shape> spawnedActionSource;
 
         private void Awake()
         {
             configurators = GetComponentsInChildren<ISatelliteConfigurator>();
             spawnedActionSource = new ActionSource<Shape>((shape) => () => scaleSystem.Remove(shape.transform));
-            despawnedActionSource = new ActionSource<Shape>((satellite) => () => OnSatelliteDespawned(satellite));
         }
 
 
@@ -78,27 +77,14 @@ namespace Core.Spawners.Listeners.Satellites
 
             foreach (var satellite in shapeSatellites)
             {
-                var transform = satellite.transform;
-                
-                scaleSystem.Remove(transform);
-                scaleSystem.AddData(transform, shrinkDuration.Random, transform.localScale.x, endScale: 0f, despawnedActionSource[satellite]);
+                if (!satellite.gameObject.activeInHierarchy)
+                    continue;
 
                 StartCoroutine(EjectFromOrbit(satellite));
             }
 
             shapeSatellites.Clear();
         }
-
-        private void OnSatelliteDespawned(Shape satellite)
-        {
-            foreach (var configurator in configurators)
-                configurator.OnDespawned(satellite);
-
-            scaleSystem.Remove(satellite.transform);
-            moveSystem.Remove(satellite.transform);
-            Spawner.Despawn(satellite);
-        }
-
 
         private Shape SpawnSatelliteFor(Shape shape)
         {

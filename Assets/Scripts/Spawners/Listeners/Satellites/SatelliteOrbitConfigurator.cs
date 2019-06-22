@@ -35,11 +35,5 @@ namespace Core.Spawners.Listeners.Satellites
                 rotationSystem.AddData(satellite.transform, angularVelocity);
             }
         }
-
-        public void OnDespawned(Shape satellite)
-        {
-            var transform = satellite.transform;
-            rotationSystem.Remove(transform);
-        }
     }
 }

@@ -4098,7 +4098,7 @@ GameObject:
   - component: {fileID: 690497196}
   - component: {fileID: 690497197}
   m_Layer: 0
-  m_Name: 'Sphere '
+  m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4974,7 +4974,7 @@ MonoBehaviour:
   isInSpawnZone: 0
   amount:
     min: 1
-    max: 5
+    max: 1
   distance:
     min: 0.5
     max: 1.5
@@ -4984,13 +4984,11 @@ MonoBehaviour:
   growDuration:
     min: 1.5
     max: 2
-  shrinkDuration:
-    min: 0.25
-    max: 0.5
   spawnerPreparer: {fileID: 2119368634}
   moveSystem: {fileID: 2126352231}
   satelliteSystem: {fileID: 2126352233}
   scaleSystem: {fileID: 2126352232}
+  killer: {fileID: 1071570866}
 --- !u!1001 &931138287
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9924,6 +9922,7 @@ GameObject:
   - component: {fileID: 1889733405}
   - component: {fileID: 1889733404}
   - component: {fileID: 1889733406}
+  - component: {fileID: 1889733407}
   m_Layer: 0
   m_Name: Listeners
   m_TagString: Untagged
@@ -9999,8 +9998,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInSpawnZone: 0
-  control: 1
+  control: 0
   status: 0
+--- !u!114 &1889733407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1889733402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad502013e95072348b0a42ec54727875, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isInSpawnZone: 0
+  systems:
+  - {fileID: 2126352231}
+  - {fileID: 2126352227}
+  - {fileID: 2126352233}
 --- !u!1001 &1915073770
 PrefabInstance:
   m_ObjectHideFlags: 0

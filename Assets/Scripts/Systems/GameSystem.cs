@@ -13,6 +13,7 @@ namespace Systems
     {
         public abstract void OnUpdate(ref JobHandle inputHandle);
         public virtual void OnLateUpdate() { }
+        public abstract void Remove(Transform transform);
     }
 
     public abstract class GameSystem<T> : GameSystem where T : struct
@@ -53,7 +54,7 @@ namespace Systems
             return true;
         }
 
-        public virtual void Remove(Transform transform)
+        public override void Remove(Transform transform)
         {
             Assert.AreEqual(transforms.length, transformPositions.Count);
 
