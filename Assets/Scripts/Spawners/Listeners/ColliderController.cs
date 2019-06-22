@@ -8,13 +8,13 @@ namespace Core.Spawners.Listeners
         [SerializeField]
         private bool control, status;
 
-        protected override void DoOnSpawned(Shape spawned)
+        protected override void OnShapeSpawned(Shape spawned)
         {
             if (control)
                 spawned.Collider.enabled = status;
         }
 
-        protected override void DoOnDespawned(Shape despawned)
+        protected override void OnShapeDespawned(Shape despawned)
         {
             despawned.Collider.enabled = despawned.EnableCollider;
         }

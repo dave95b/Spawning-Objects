@@ -20,7 +20,7 @@ namespace Core.Spawners.Listeners
             actionSource = new ActionSource<Shape>((shape) => () => system.Remove(shape.transform));    
         }
 
-        protected override void DoOnSpawned(Shape spawned)
+        protected override void OnShapeSpawned(Shape spawned)
         {
             float _scale = scale.Random;
             spawned.Scale = _scale;
@@ -28,7 +28,7 @@ namespace Core.Spawners.Listeners
             system.AddData(spawned.transform, duration.Random, startScale: 0f, _scale, actionSource[spawned]);
         }
 
-        protected override void DoOnDespawned(Shape despawned)
+        protected override void OnShapeDespawned(Shape despawned)
         {
             system.Remove(despawned.transform);
         }

@@ -10,12 +10,12 @@ namespace Core.Spawners.Listeners
         private GameSystem[] systems;
 
 
-        protected override void DoOnDespawned(Shape despawned)
+        protected override void OnShapeDespawned(Shape despawned)
         {
             foreach (var system in systems)
                 system.Remove(despawned.transform);
         }
 
-        protected override void DoOnSpawned(Shape spawned) { }
+        protected override void OnShapeSpawned(Shape spawned) { }
     }
 }

@@ -17,7 +17,7 @@ namespace Core.Spawners.Listeners
         [SerializeField]
         private OscillationSystem system; 
 
-        protected override void DoOnSpawned(Shape spawned)
+        protected override void OnShapeSpawned(Shape spawned)
         {
             Vector3 oscillationOffset;
             if (direction == OffsetDirection.Outward)
@@ -31,7 +31,7 @@ namespace Core.Spawners.Listeners
                 system.AddData(spawned.transform, data);
         }
 
-        protected override void DoOnDespawned(Shape despawned)
+        protected override void OnShapeDespawned(Shape despawned)
         {
             system.Remove(despawned.transform);
         }

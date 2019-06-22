@@ -17,7 +17,7 @@ namespace Core.Spawners.Listeners
         private MoveSystem moveSystem;
 
 
-        protected override void DoOnSpawned(Shape spawned)
+        protected override void OnShapeSpawned(Shape spawned)
         {
             Vector3 velocity;
             if (direction == MovementDirection.Forward)
@@ -32,7 +32,7 @@ namespace Core.Spawners.Listeners
                 moveSystem.AddData(spawned.transform, velocity * moveSpeed);
         }
 
-        protected override void DoOnDespawned(Shape despawned)
+        protected override void OnShapeDespawned(Shape despawned)
         {
             moveSystem.Remove(despawned.transform);
         }

@@ -11,7 +11,7 @@ namespace Core.Spawners.Listeners
         [SerializeField]
         private RotationSystem rotationSystem;
 
-        protected override void DoOnSpawned(Shape spawned)
+        protected override void OnShapeSpawned(Shape spawned)
         {
             spawned.transform.rotation = Random.rotation;
 
@@ -20,7 +20,7 @@ namespace Core.Spawners.Listeners
                 rotationSystem.AddData(spawned.transform, Random.onUnitSphere * speed.Random);
         }
 
-        protected override void DoOnDespawned(Shape despawned)
+        protected override void OnShapeDespawned(Shape despawned)
         {
             rotationSystem.Remove(despawned.transform);
         }

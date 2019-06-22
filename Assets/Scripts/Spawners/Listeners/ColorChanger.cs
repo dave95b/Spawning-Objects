@@ -37,7 +37,7 @@ namespace Core.Spawners.Listeners
             }
         }
 
-        protected override void DoOnSpawned(Shape spawned)
+        protected override void OnShapeSpawned(Shape spawned)
         {
             if (uniformColors)
                 spawned.SetColor(RandomColor);
@@ -48,6 +48,6 @@ namespace Core.Spawners.Listeners
             }
         }
 
-        protected override void DoOnDespawned(Shape despawned) { }
+        protected override void OnShapeDespawned(Shape despawned) { }
     }
 }

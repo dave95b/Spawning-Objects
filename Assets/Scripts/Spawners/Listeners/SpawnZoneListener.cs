@@ -14,29 +14,29 @@ namespace Core.Spawners.Listeners
         public void OnSpawnedInZone(Shape shape)
         {
             if (isInSpawnZone)
-                DoOnSpawned(shape);
+                OnShapeSpawned(shape);
         }
 
         public void OnSpawned(Shape spawned)
         {
             if (!isInSpawnZone)
-                DoOnSpawned(spawned);
+                OnShapeSpawned(spawned);
         }
 
         public void OnDesawnedInZone(Shape shape)
         {
             if (isInSpawnZone)
-                DoOnDespawned(shape);
+                OnShapeDespawned(shape);
         }
 
         public void OnDespawned(Shape despawned)
         {
             if (!isInSpawnZone)
-                DoOnDespawned(despawned);
+                OnShapeDespawned(despawned);
         }
 
-        protected abstract void DoOnSpawned(Shape spawned);
-        protected abstract void DoOnDespawned(Shape despawned);
+        protected abstract void OnShapeSpawned(Shape spawned);
+        protected abstract void OnShapeDespawned(Shape despawned);
 
         private void Awake()
         {

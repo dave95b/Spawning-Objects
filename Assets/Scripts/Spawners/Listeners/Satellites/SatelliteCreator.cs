@@ -47,7 +47,7 @@ namespace Core.Spawners.Listeners.Satellites
         }
 
 
-        protected override void DoOnSpawned(Shape spawned)
+        protected override void OnShapeSpawned(Shape spawned)
         {
             int count = (int)amount.Random;
             if (count == 0)
@@ -70,7 +70,7 @@ namespace Core.Spawners.Listeners.Satellites
                 configurator.Configure(spawned, list);
         }
 
-        protected override void DoOnDespawned(Shape despawned)
+        protected override void OnShapeDespawned(Shape despawned)
         {
             if (!satellites.TryGetValue(despawned, out var shapeSatellites))
                 return;
