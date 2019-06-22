@@ -8,30 +8,32 @@ using Unity.Mathematics;
 
 namespace Systems
 {
-    public class RotationSystem : GameSystem<float3>
+    public class RotationSystem : GameSystem<Vector3>
     {
-        private NativeList<float3> angularVelocities;
+        private NativeList<Quaternion> angularVelocities;
+        private float deltaTime;
 
         protected override void Awake()
         {
             base.Awake();
-            angularVelocities = new NativeList<float3>(128, Allocator.Persistent);
+            angularVelocities = new NativeList<Quaternion>(128, Allocator.Persistent);
         }
 
         public override void OnUpdate(ref JobHandle inputHandle)
         {
+            deltaTime = Time.deltaTime;
+
             var job = new RotateJob
             {
-                AngularVelocities = angularVelocities,
-                DeltaTime = Time.deltaTime
+                AngularVelocities = angularVelocities
             };
 
             inputHandle = job.Schedule(transforms, inputHandle);
         }
 
-        protected override void OnAdd(float3 data)
+        protected override void OnAdd(Vector3 data)
         {
-            angularVelocities.Add(data);
+            angularVelocities.Add(Quaternion.Euler(data * deltaTime));
         }
 
         protected override void OnRemove(int index)
@@ -50,15 +52,11 @@ namespace Systems
     struct RotateJob : IJobParallelForTransform
     {
         [ReadOnly]
-        public NativeArray<float3> AngularVelocities;
-
-        [ReadOnly]
-        public float DeltaTime;
+        public NativeArray<Quaternion> AngularVelocities;
 
         public void Execute(int index, TransformAccess transform)
         {
-            float3 velocity = math.radians(AngularVelocities[index]) * DeltaTime;
-            transform.localRotation *= quaternion.EulerXYZ(velocity);
+            transform.localRotation *= AngularVelocities[index];
         }
     }
 }
