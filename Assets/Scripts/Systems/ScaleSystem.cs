@@ -98,6 +98,17 @@ namespace Systems
             onFinishedActions.RemoveAtSwapback(index);
         }
 
+        protected override void OnUpdateData(int index, ScaleSystemData data)
+        {
+            var ranges = new ScaleRanges(data.StartScale, data.EndScale);
+            scaleRanges[index] = ranges;
+
+            times[index] = 0f;
+            scales[index] = transform.localScale.x;
+            durations[index] = data.Duration;
+            onFinishedActions[index] = data.OnFinished;
+        }
+
 
         protected override void OnDestroy()
         {

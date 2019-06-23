@@ -580,6 +580,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInSpawnZone: 0
+  randomizer:
+    BaseColor: {r: 0.09158063, g: 0.707528, b: 0.9245283, a: 1}
+    HueRange:
+      min: 0
+      max: 0.1
+    SaturationRange:
+      min: 0
+      max: 0.5
+    ValueRange:
+      min: 0
+      max: 0.5
   baseColor: {r: 0.09158063, g: 0.707528, b: 0.9245283, a: 1}
   hueRange:
     min: 0
@@ -2980,6 +2991,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInSpawnZone: 0
+  randomizer:
+    BaseColor: {r: 0.9339623, g: 0.2511125, b: 0.7907155, a: 1}
+    HueRange:
+      min: 0
+      max: 0.1
+    SaturationRange:
+      min: 0
+      max: 0.5
+    ValueRange:
+      min: 0
+      max: 0.5
   baseColor: {r: 0.9339623, g: 0.2511125, b: 0.7907155, a: 1}
   hueRange:
     min: 0
@@ -5758,6 +5780,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInSpawnZone: 0
+  randomizer:
+    BaseColor: {r: 0.11525452, g: 0.6981132, b: 0.15005203, a: 1}
+    HueRange:
+      min: 0
+      max: 0.1
+    SaturationRange:
+      min: 0
+      max: 0.5
+    ValueRange:
+      min: 0
+      max: 0.5
   baseColor: {r: 0.11525452, g: 0.6981132, b: 0.15005203, a: 1}
   hueRange:
     min: 0

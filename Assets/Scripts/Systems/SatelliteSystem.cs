@@ -68,6 +68,14 @@ namespace Systems
             satellitePositions.RemoveAtSwapBack(index);
         }
 
+        protected override void OnUpdateData(int index, SatelliteSystemData systemData)
+        {
+            var satelliteData = new SatelliteData(systemData);
+            data[index] = satelliteData;
+            planets[index] = systemData.Planet;
+            planetPositions[index] = systemData.Planet.position;
+        }
+
         protected override void OnDestroy()
         {
             data.Dispose();

@@ -5,7 +5,7 @@ using Utilities;
 
 namespace Core.BehaviourZones
 {
-    [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(Rigidbody), typeof(Collider))]
     public abstract class BehaviourZone : MonoBehaviour
     {
         [SerializeField, ReadOnly]

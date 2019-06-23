@@ -21,7 +21,7 @@ namespace Systems
 
         public override void OnUpdate(ref JobHandle inputHandle)
         {
-            deltaTime = Time.deltaTime;
+            deltaTime = Time.fixedDeltaTime;
 
             var job = new RotateJob
             {
@@ -39,6 +39,11 @@ namespace Systems
         protected override void OnRemove(int index)
         {
             angularVelocities.RemoveAtSwapBack(index);
+        }
+
+        protected override void OnUpdateData(int index, Vector3 data)
+        {
+            angularVelocities[index] = Quaternion.Euler(data * deltaTime);
         }
 
         protected override void OnDestroy()

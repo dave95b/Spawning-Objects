@@ -38,6 +38,11 @@ namespace Systems
             velocities.RemoveAtSwapBack(index);
         }
 
+        protected override void OnUpdateData(int index, Vector3 data)
+        {
+            velocities[index] = data;
+        }
+
         protected override void OnDestroy()
         {
             velocities.Dispose();

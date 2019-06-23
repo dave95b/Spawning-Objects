@@ -40,6 +40,11 @@ namespace Systems
             systemData.RemoveAtSwapBack(index);
         }
 
+        protected override void OnUpdateData(int index, OscillationData data)
+        {
+            systemData[index] = data;
+        }
+
         protected override void OnDestroy()
         {
             systemData.Dispose();

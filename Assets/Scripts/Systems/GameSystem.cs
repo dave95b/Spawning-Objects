@@ -19,7 +19,6 @@ namespace Systems
     public abstract class GameSystem<T> : GameSystem where T : struct
     {
         protected TransformAccessArray transforms;
-        //protected NativeList<T> dataList;
 
         protected Dictionary<Transform, int> transformPositions = new Dictionary<Transform, int>(new TransformComparer());
 
@@ -30,7 +29,6 @@ namespace Systems
         protected virtual void Awake()
         {
             transforms = new TransformAccessArray(128, 12);
-            //dataList = new NativeList<T>(128, Allocator.Persistent);
         }
 
         public void AddData(Transform transform, T data)
@@ -45,9 +43,7 @@ namespace Systems
 
             int index = transforms.length;
             transformPositions[transform] = index;
-
             transforms.Add(transform);
-            //dataList.Add(data);
 
             OnAdd(data);
             Assert.AreEqual(transforms.length, transformPositions.Count);
@@ -57,10 +53,9 @@ namespace Systems
         {
             Assert.AreEqual(transforms.length, transformPositions.Count);
 
-            if (!transformPositions.ContainsKey(transform))
+            if (!transformPositions.TryGetValue(transform, out int index))
                 return;
 
-            int index = transformPositions[transform];
             OnRemove(index);
 
             if (transforms.length > 0)
@@ -70,20 +65,26 @@ namespace Systems
             }
 
             transforms.RemoveAtSwapBack(index);
-            //dataList.RemoveAtSwapBack(index);
-
             transformPositions.Remove(transform);
 
             Assert.AreEqual(transforms.length, transformPositions.Count);
         }
 
-        protected abstract void OnRemove(int index);
+        public void UpdateData(Transform transform, T data)
+        {
+            if (transformPositions.TryGetValue(transform, out int index))
+                OnUpdateData(index, data);
+            else
+                AddData(transform, data);
+        }
+
         protected abstract void OnAdd(T data);
+        protected abstract void OnRemove(int index);
+        protected abstract void OnUpdateData(int index, T data);
 
         protected virtual void OnDestroy()
         {
             transforms.Dispose();
-            //dataList.Dispose();
         }
     }
 

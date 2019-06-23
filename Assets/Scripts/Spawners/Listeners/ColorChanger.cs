@@ -2,49 +2,26 @@
 using System.Collections.Generic;
 using SpawnerSystem.Spawners;
 using Core.Spawners.Zones;
+using Utilities;
 
 namespace Core.Spawners.Listeners
 {
     public class ColorChanger : SpawnZoneListener
     {
         [SerializeField]
-        private Color baseColor;
-
-        [SerializeField, FloatRangeSlider(0f, 1f)]
-        private FloatRange hueRange, saturationRange, valueRange;
+        private ColorRandomizer randomizer;
 
         [SerializeField]
         private bool uniformColors;
 
-        private Color RandomColor
-        {
-            get
-            {
-                Color.RGBToHSV(baseColor, out float hue, out float saturation, out float value);
-
-                float randomHue = hueRange.Random;
-                float randomSaturation = saturationRange.Random;
-                float randomValue = valueRange.Random;
-
-                return Random.ColorHSV(
-                                hueMin: hue - randomHue,
-                                hueMax: hue + randomHue,
-                                saturationMin: saturation - randomSaturation,
-                                saturationMax: saturation + randomSaturation,
-                                valueMin: value - randomValue,
-                                valueMax: value + randomValue,
-                                alphaMin: 1f, alphaMax: 1f);
-            }
-        }
-
         protected override void OnShapeSpawned(Shape spawned)
         {
             if (uniformColors)
-                spawned.SetColor(RandomColor);
+                spawned.SetColor(randomizer.RandomColor);
             else
             {
                 for (int i = 0; i < spawned.Count; i++)
-                    spawned.SetColor(RandomColor, i);
+                    spawned.SetColor(randomizer.RandomColor, i);
             }
         }
 
