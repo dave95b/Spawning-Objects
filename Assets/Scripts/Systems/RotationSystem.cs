@@ -31,6 +31,12 @@ namespace Systems
             inputHandle = job.Schedule(transforms, inputHandle);
         }
 
+        public override Vector3 GetData(int index)
+        {
+            var rotation = angularVelocities[index];
+            return rotation.eulerAngles / deltaTime;
+        }
+
         protected override void OnAdd(Vector3 data)
         {
             angularVelocities.Add(Quaternion.Euler(data * deltaTime));

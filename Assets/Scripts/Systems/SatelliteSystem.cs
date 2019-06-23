@@ -49,6 +49,13 @@ namespace Systems
             inputHandle = satellitePositionsJob.Schedule(transforms, inputHandle);
         }
 
+        public override SatelliteSystemData GetData(int index)
+        {
+            var satelliteData = data[index];
+            float radius = math.length(satelliteData.SinOffset);
+            return new SatelliteSystemData(satelliteData.Frequency, radius, satelliteData.CosOffset, planets[index]);
+        }
+
         protected override void OnAdd(SatelliteSystemData systemData)
         {
             var satelliteData = new SatelliteData(systemData);
@@ -110,10 +117,7 @@ namespace Systems
         {
             Frequency = data.Frequency;
             SinOffset = new float3(0, 0, 1) * data.Radius;
-
-            CosOffset = math.cross(data.OrbitAxis, UnityEngine.Random.onUnitSphere);
-            CosOffset = math.normalize(CosOffset);
-            CosOffset *= data.Radius;
+            CosOffset = data.OrbitAxis * data.Radius;
         }
     }
 

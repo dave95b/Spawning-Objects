@@ -31,6 +31,16 @@ namespace Systems
             transforms = new TransformAccessArray(128, 12);
         }
 
+        public bool TryGetData(Transform transform, out T data)
+        {
+            data = default;
+            if (!transformPositions.TryGetValue(transform, out int index))
+                return false;
+
+            data = GetData(index);
+            return true;
+        }
+
         public void AddData(Transform transform, T data)
         {
             if (!transform.gameObject.activeInHierarchy)
@@ -78,6 +88,7 @@ namespace Systems
                 AddData(transform, data);
         }
 
+        public abstract T GetData(int index);
         protected abstract void OnAdd(T data);
         protected abstract void OnRemove(int index);
         protected abstract void OnUpdateData(int index, T data);

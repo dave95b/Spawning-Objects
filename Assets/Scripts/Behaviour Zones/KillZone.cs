@@ -19,5 +19,11 @@ namespace Core.BehaviourZones
         }
 
         protected override void OnShapeExit(Shape shape) { }
+
+        protected override void Reset()
+        {
+            base.Reset();
+            enter = true;
+        }
     }
 }

@@ -30,6 +30,12 @@ namespace Systems
             inputHandle = job.Schedule(transforms, inputHandle);
         }
 
+
+        public override OscillationData GetData(int index)
+        {
+            return systemData[index];
+        }
+
         protected override void OnAdd(OscillationData data)
         {
             systemData.Add(data);

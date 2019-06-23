@@ -18,5 +18,11 @@ namespace Core.BehaviourZones
             shape.Collider.enabled = false;
             killer.Kill(shape);
         }
+
+        protected override void Reset()
+        {
+            base.Reset();
+            exit = true;
+        }
     }
 }

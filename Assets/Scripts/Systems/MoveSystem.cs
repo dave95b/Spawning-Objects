@@ -28,6 +28,12 @@ namespace Systems
             inputHandle = job.Schedule(transforms, inputHandle); 
         }
 
+
+        public override Vector3 GetData(int index)
+        {
+            return velocities[index];
+        }
+
         protected override void OnAdd(Vector3 data)
         {
             velocities.Add(data);

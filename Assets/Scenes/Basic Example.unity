@@ -500,6 +500,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collider: {fileID: 57618997}
+  enter: 1
+  exit: 0
   killer: {fileID: 76961941}
 --- !u!54 &57618999
 Rigidbody:
@@ -2213,16 +2215,6 @@ MonoBehaviour:
     ValueRange:
       min: 0
       max: 0.5
-  baseColor: {r: 0.09158063, g: 0.707528, b: 0.9245283, a: 1}
-  hueRange:
-    min: 0
-    max: 0.1
-  saturationRange:
-    min: 0
-    max: 0.5
-  valueRange:
-    min: 0
-    max: 0.5
   uniformColors: 0
 --- !u!114 &336511120
 MonoBehaviour:
@@ -4080,16 +4072,6 @@ MonoBehaviour:
     ValueRange:
       min: 0
       max: 0.5
-  baseColor: {r: 0.9339623, g: 0.2511125, b: 0.7907155, a: 1}
-  hueRange:
-    min: 0
-    max: 0.1
-  saturationRange:
-    min: 0
-    max: 0.5
-  valueRange:
-    min: 0
-    max: 0.5
   uniformColors: 0
 --- !u!114 &690497196
 MonoBehaviour:
@@ -4879,7 +4861,7 @@ MonoBehaviour:
   isInSpawnZone: 0
   amount:
     min: 0
-    max: 0
+    max: 5
   distance:
     min: 0.5
     max: 1.5
@@ -5032,6 +5014,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collider: {fileID: 937116317}
+  enter: 0
+  exit: 1
   killer: {fileID: 76961941}
 --- !u!54 &937116319
 Rigidbody:
@@ -7580,6 +7564,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collider: {fileID: 1425450494}
+  enter: 0
+  exit: 1
   killer: {fileID: 76961941}
 --- !u!1001 &1430722730
 PrefabInstance:
@@ -9158,6 +9144,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collider: {fileID: 1753782808}
+  enter: 1
+  exit: 0
   killer: {fileID: 76961941}
 --- !u!1001 &1758891976
 PrefabInstance:
@@ -9408,16 +9396,6 @@ MonoBehaviour:
     ValueRange:
       min: 0
       max: 0.5
-  baseColor: {r: 0.11525452, g: 0.6981132, b: 0.15005203, a: 1}
-  hueRange:
-    min: 0
-    max: 0.1
-  saturationRange:
-    min: 0
-    max: 0.5
-  valueRange:
-    min: 0
-    max: 0.5
   uniformColors: 0
 --- !u!114 &1798658697
 MonoBehaviour:
@@ -9433,8 +9411,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInSpawnZone: 0
   offset:
-    min: 0
-    max: 0
+    min: 1
+    max: 1
   frequency:
     min: 1
     max: 1
@@ -9836,16 +9814,6 @@ MonoBehaviour:
     ValueRange:
       min: 0.3
       max: 0.7
-  baseColor: {r: 1, g: 0.92156863, b: 0.23137255, a: 1}
-  hueRange:
-    min: 0
-    max: 0
-  saturationRange:
-    min: 0.3
-    max: 0.7
-  valueRange:
-    min: 0.3
-    max: 0.7
   uniformColors: 0
 --- !u!114 &1889733405
 MonoBehaviour:
@@ -11809,6 +11777,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game
       objectReference: {fileID: 0}
+    - target: {fileID: 76961941, guid: 1bb19f25ecad78a4788f1c3798325485, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 2126352232}
     - target: {fileID: 2211647473721754271, guid: 1bb19f25ecad78a4788f1c3798325485,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -11869,10 +11841,6 @@ PrefabInstance:
       propertyPath: spawnerPreparer
       value: 
       objectReference: {fileID: 720044923}
-    - target: {fileID: 76961941, guid: 1bb19f25ecad78a4788f1c3798325485, type: 3}
-      propertyPath: system
-      value: 
-      objectReference: {fileID: 2126352232}
     - target: {fileID: 2211647473721754269, guid: 1bb19f25ecad78a4788f1c3798325485,
         type: 3}
       propertyPath: m_Enabled

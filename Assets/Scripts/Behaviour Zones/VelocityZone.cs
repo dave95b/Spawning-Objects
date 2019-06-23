@@ -4,7 +4,7 @@ using Systems;
 
 namespace Core.BehaviourZones
 {
-    public class VelocityModifier : BehaviourZone
+    public class VelocityZone : BehaviourZone
     {
         [SerializeField]
         private MoveSystem system;

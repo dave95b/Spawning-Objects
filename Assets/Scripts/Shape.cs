@@ -60,6 +60,12 @@ namespace Core
             renderers[index].SetPropertyBlock(propertyBlock);
         }
 
+        public Color GetColor(int index)
+        {
+            renderers[index].GetPropertyBlock(propertyBlock);
+            return propertyBlock.GetColor(colorPropertyId);
+        }
+
         public void SetMaterial(Material material)
         {
             for (int i = 0; i < Count; i++)

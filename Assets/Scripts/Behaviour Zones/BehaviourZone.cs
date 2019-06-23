@@ -11,6 +11,9 @@ namespace Core.BehaviourZones
         [SerializeField, ReadOnly]
         private Collider collider;
 
+        [SerializeField]
+        protected bool enter, exit;
+
         protected abstract Color GizmoColor { get; }
 
         private void Awake()
@@ -25,6 +28,9 @@ namespace Core.BehaviourZones
 
         private void OnTriggerEnter(Collider other)
         {
+            if (!enter)
+                return;
+
             var shape = other.GetComponent<Shape>();
             if (shape != null)
                 OnShapeEnter(shape);
@@ -32,13 +38,16 @@ namespace Core.BehaviourZones
 
         private void OnTriggerExit(Collider other)
         {
+            if (!exit)
+                return;
+
             var shape = other.GetComponent<Shape>();
             if (shape != null)
                 OnShapeExit(shape);
         }
 
 
-        private void Reset()
+        protected virtual void Reset()
         {
             SetupCollider();
             var rigidbody = GetComponent<Rigidbody>();

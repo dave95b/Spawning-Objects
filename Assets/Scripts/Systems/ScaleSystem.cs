@@ -76,6 +76,13 @@ namespace Systems
             toInvoke.Clear();
         }
 
+
+        public override ScaleSystemData GetData(int index)
+        {
+            var scaleRange = scaleRanges[index];
+            return new ScaleSystemData(durations[index], scaleRange.StartScale, scaleRange.EndScale, onFinishedActions[index]);
+        }
+
         protected override void OnAdd(ScaleSystemData data)
         {
             var ranges = new ScaleRanges(data.StartScale, data.EndScale);
