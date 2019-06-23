@@ -2494,6 +2494,74 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 372564175}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &374959304
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 374959305}
+  - component: {fileID: 374959307}
+  - component: {fileID: 374959306}
+  m_Layer: 0
+  m_Name: Main Pool (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &374959305
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374959304}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 720044924}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &374959306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374959304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a78fc530f6fa3ab41a33a5a9ee0655de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectCount: 8
+--- !u!114 &374959307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374959304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fef166f246ba414187d04ae230956e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectorProvider: {fileID: 374959306}
+  poolPreparers:
+  - {fileID: 778598377}
+  - {fileID: 778289717}
+  - {fileID: 1110225578}
+  - {fileID: 232183893}
+  - {fileID: 1004955658}
+  - {fileID: 1339485303}
+  - {fileID: 1309632678}
+  - {fileID: 1575831564}
+  multiPoolPreparers: []
 --- !u!1001 &388125524
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3007,13 +3075,6 @@ MonoBehaviour:
   selectorProvider: {fileID: 491706016}
   poolPreparers:
   - {fileID: 778598377}
-  - {fileID: 778289717}
-  - {fileID: 1110225578}
-  - {fileID: 232183893}
-  - {fileID: 1004955658}
-  - {fileID: 1339485303}
-  - {fileID: 1309632678}
-  - {fileID: 1575831564}
   multiPoolPreparers: []
 --- !u!114 &491706016
 MonoBehaviour:
@@ -3027,7 +3088,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a78fc530f6fa3ab41a33a5a9ee0655de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectCount: 8
+  objectCount: 1
 --- !u!4 &491706017
 Transform:
   m_ObjectHideFlags: 0
@@ -4087,8 +4148,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInSpawnZone: 0
   offset:
-    min: 0
-    max: 0
+    min: 1
+    max: 1.5
   frequency:
     min: 1
     max: 1
@@ -4252,6 +4313,7 @@ Transform:
   - {fileID: 1918154587}
   - {fileID: 1849756602}
   - {fileID: 491706017}
+  - {fileID: 374959305}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4861,7 +4923,7 @@ MonoBehaviour:
   isInSpawnZone: 0
   amount:
     min: 0
-    max: 5
+    max: 0
   distance:
     min: 0.5
     max: 1.5
@@ -9368,8 +9430,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInSpawnZone: 0
   speed:
-    min: 1.5
-    max: 3
+    min: 0.5
+    max: 1
   direction: 1
   moveSystem: {fileID: 2126352231}
 --- !u!114 &1798658696
@@ -11849,6 +11911,11 @@ PrefabInstance:
     - target: {fileID: 2211647473721754259, guid: 1bb19f25ecad78a4788f1c3798325485,
         type: 3}
       propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2211647473721754258, guid: 1bb19f25ecad78a4788f1c3798325485,
+        type: 3}
+      propertyPath: createCount
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

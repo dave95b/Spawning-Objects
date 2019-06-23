@@ -12,13 +12,13 @@ namespace Core.BehaviourZones
 
         protected override Color GizmoColor => Color.red;
 
-        protected override void OnShapeEnter(Shape shape)
+        public override void OnShapeEnter(Shape shape)
         {
             shape.Collider.enabled = false;
             killer.Kill(shape);
         }
 
-        protected override void OnShapeExit(Shape shape) { }
+        public override void OnShapeExit(Shape shape) { }
 
         protected override void Reset()
         {

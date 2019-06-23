@@ -21,9 +21,8 @@ namespace Core.BehaviourZones
             return colors;
         }
 
-        protected override void OnShapeEnter(Shape shape)
+        protected override void OnShapeEnter(Shape shape, Color[] colors)
         {
-            base.OnShapeEnter(shape);
             shape.SetColor(randomizer.RandomColor);
         }
 

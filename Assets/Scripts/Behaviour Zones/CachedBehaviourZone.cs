@@ -10,20 +10,23 @@ namespace Core.BehaviourZones
         protected abstract T GetCachedData(Shape shape);
 
 
-        protected override void OnShapeEnter(Shape shape)
+        public override sealed void OnShapeEnter(Shape shape)
         {
-            cache[shape] = GetCachedData(shape);
+            var data = GetCachedData(shape);
+            cache[shape] = data;
+            OnShapeEnter(shape, data);
         }
 
-        protected override sealed void OnShapeExit(Shape shape)
+        public override sealed void OnShapeExit(Shape shape)
         {
             if (!cache.TryGetValue(shape, out T data))
-                return;
+                data = GetCachedData(shape);
 
             OnShapeExit(shape, data);
             cache.Remove(shape);
         }
 
+        protected abstract void OnShapeEnter(Shape shape, T data);
         protected abstract void OnShapeExit(Shape shape, T data);
     }
 }

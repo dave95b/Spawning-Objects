@@ -5,10 +5,10 @@ using Utilities;
 
 namespace Core.BehaviourZones
 {
-    [RequireComponent(typeof(Rigidbody), typeof(Collider))]
+    [RequireComponent(typeof(Rigidbody))]
     public abstract class BehaviourZone : MonoBehaviour
     {
-        [SerializeField, ReadOnly]
+        [SerializeField]
         private Collider collider;
 
         [SerializeField]
@@ -16,15 +16,9 @@ namespace Core.BehaviourZones
 
         protected abstract Color GizmoColor { get; }
 
-        private void Awake()
-        {
-            if (collider != null)
-                SetupCollider();
-        }
 
-
-        protected abstract void OnShapeEnter(Shape shape);
-        protected abstract void OnShapeExit(Shape shape);
+        public abstract void OnShapeEnter(Shape shape);
+        public abstract void OnShapeExit(Shape shape);
 
         private void OnTriggerEnter(Collider other)
         {
