@@ -9,25 +9,31 @@ namespace Core
         [SerializeField]
         private Game game;
 
+        [SerializeField, MinValue(1)]
+        private int createAmount = 1;
+
         [SerializeField, MinValue(0.1f)]
         private float createTime, destroyTime;
 
-        private float _createProgress, _destroyProgress;
+        [SerializeField]
+        private bool create = true, destroy;
+
+        private float createProgress, destroyProgress;
 
         private void Update()
         {
-            _createProgress += Time.deltaTime;
-            _destroyProgress += Time.deltaTime;
+            createProgress += Time.deltaTime;
+            destroyProgress += Time.deltaTime;
 
-            if (_createProgress >= createTime)
+            if (create && createProgress >= createTime)
             {
-                game.Create();
-                _createProgress = 0f;
+                game.Create(createAmount);
+                createProgress = 0f;
             }
-            else if (_destroyProgress >= destroyTime)
+            else if (destroy && destroyProgress >= destroyTime)
             {
-                game.RemoveRandom();
-                _destroyProgress = 0f;
+                game.RemoveAll();
+                destroyProgress = 0f;
             }
         }
     }

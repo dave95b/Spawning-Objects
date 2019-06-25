@@ -4,6 +4,7 @@ using SpawnerSystem.Spawners;
 using Systems;
 using System.Collections;
 using Utilities;
+using UnityEngine.Assertions;
 
 namespace Core.Spawners.Listeners.Satellites
 {
@@ -25,17 +26,18 @@ namespace Core.Spawners.Listeners.Satellites
         private ShapeSpawnerPreparer spawnerPreparer;
 
         [SerializeField]
-        private MoveSystem moveSystem;
-
-        [SerializeField]
         private SatelliteSystem satelliteSystem;
 
         [SerializeField]
         private ScaleSystem scaleSystem;
 
+        [SerializeField]
+        private ShapeKiller killer;
+
         private Spawner<Shape> Spawner => spawnerPreparer.Spawner;
 
         private Dictionary<Shape, List<Shape>> satellites = new Dictionary<Shape, List<Shape>>();
+
         private ISatelliteConfigurator[] configurators;
 
         private ActionSource<Shape> spawnedActionSource;
@@ -46,44 +48,55 @@ namespace Core.Spawners.Listeners.Satellites
             spawnedActionSource = new ActionSource<Shape>((shape) => () => scaleSystem.Remove(shape.transform));
         }
 
-
         protected override void OnShapeSpawned(Shape spawned)
         {
             int count = (int)amount.Random;
             if (count == 0)
                 return;
 
+            List<Shape> list = GetOrCreateSatelliteList(spawned);
+            SpawnSatellites(spawned, count, list);
+
+            foreach (var configurator in configurators)
+                configurator.Configure(spawned, list);
+        }
+
+        private void SpawnSatellites(Shape planet, int count, List<Shape> list)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                Shape satellite = SpawnSatelliteFor(planet);
+                list.Add(satellite);
+
+                var data = new ScaleSystemData(growDuration.Random, startScale: 0f, satellite.Scale, spawnedActionSource[satellite]);
+                scaleSystem.AddData(satellite.transform, data);
+            }
+        }
+
+        private List<Shape> GetOrCreateSatelliteList(Shape spawned)
+        {
             if (!satellites.TryGetValue(spawned, out var list))
             {
                 list = new List<Shape>(5);
                 satellites[spawned] = list;
             }
 
-            for (int i = 0; i < count; i++)
-            {
-                Shape satellite = SpawnSatelliteFor(spawned);
-                list.Add(satellite);
-
-                var data = new ScaleSystemData(growDuration.Random, startScale: 0f, satellite.Scale, spawnedActionSource[satellite]);
-                scaleSystem.AddData(satellite.transform, data);
-            }
-
-            foreach (var configurator in configurators)
-                configurator.Configure(spawned, list);
+            return list;
         }
+
 
         protected override void OnShapeDespawned(Shape despawned)
         {
             if (!satellites.TryGetValue(despawned, out var shapeSatellites))
                 return;
 
-            foreach (var satellite in shapeSatellites)
-            {
-                if (!satellite.gameObject.activeInHierarchy)
-                    continue;
+            KillSatellites(shapeSatellites);
+        }
 
-                StartCoroutine(EjectFromOrbit(satellite));
-            }
+        private void KillSatellites(List<Shape> shapeSatellites)
+        {
+            foreach (var satellite in shapeSatellites)
+                killer.Kill(satellite);
 
             shapeSatellites.Clear();
         }
@@ -96,16 +109,6 @@ namespace Core.Spawners.Listeners.Satellites
             satellite.Scale = shape.Scale * scale.Random;
 
             return satellite;
-        }
-
-        private IEnumerator EjectFromOrbit(Shape satellite)
-        {
-            Vector3 position = satellite.transform.localPosition;
-            yield return null;
-            Vector3 velocity = (satellite.transform.localPosition - position) / Time.deltaTime;
-            satelliteSystem.Remove(satellite.transform);
-
-            moveSystem.AddData(satellite.transform, velocity);
         }
     }
 }

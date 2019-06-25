@@ -28,8 +28,8 @@ namespace Core
         private Collider collider;
         public Collider Collider => collider;
 
-
         public Spawner<Shape> Spawner;
+
 
         private static int colorPropertyId = Shader.PropertyToID("_Color");
         private static MaterialPropertyBlock propertyBlock;

@@ -13,7 +13,7 @@ namespace Core
     public class Game : MonoBehaviour
     {
         [SerializeField]
-        private int createPerFrame = 15, removePerFrame = 30;
+        private int createPerFrame = 15;
 
         [SerializeField]
         private ShapeSpawnerPreparer spawnerPreparer;

@@ -29,12 +29,10 @@ namespace Utilities
 
         public void Kill(Shape shape)
         {
-            system.Remove(shape.transform);
-
             float scale = shape.transform.localScale.x;
-
             var data = new ScaleSystemData(duration.Random, scale, endScale: 0f, actionSource[shape]);
-            system.AddData(shape.transform, data);
+
+            system.UpdateData(shape.transform, data);
         }
     }
 }

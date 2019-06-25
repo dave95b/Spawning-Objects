@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Systems;
+using Core.Spawners.Listeners.Satellites;
 
 namespace Core.Spawners.Listeners
 {
@@ -8,7 +9,6 @@ namespace Core.Spawners.Listeners
     {
         [SerializeField]
         private GameSystem[] systems;
-
 
         protected override void OnShapeDespawned(Shape despawned)
         {

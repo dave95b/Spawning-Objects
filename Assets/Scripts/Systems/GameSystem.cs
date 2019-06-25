@@ -1,4 +1,5 @@
-﻿using NaughtyAttributes;
+﻿using Core;
+using NaughtyAttributes;
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
@@ -43,11 +44,10 @@ namespace Systems
 
         public void AddData(Transform transform, T data)
         {
-            if (!transform.gameObject.activeInHierarchy)
-                return;
-
             Assert.AreEqual(transforms.length, transformPositions.Count);
 
+            if (!transform.gameObject.activeInHierarchy)
+                return;
             if (transformPositions.ContainsKey(transform))
                 return;
 
@@ -82,10 +82,22 @@ namespace Systems
 
         public void UpdateData(Transform transform, T data)
         {
+            Assert.AreEqual(transforms.length, transformPositions.Count);
+
+            if (!transform.gameObject.activeInHierarchy)
+                return;
+
             if (transformPositions.TryGetValue(transform, out int index))
                 OnUpdateData(index, data);
             else
                 AddData(transform, data);
+
+            Assert.AreEqual(transforms.length, transformPositions.Count);
+        }
+
+        public bool Contains(Transform transform)
+        {
+            return transformPositions.ContainsKey(transform);
         }
 
         public abstract T GetData(int index);

@@ -22,15 +22,15 @@ namespace Core.Spawners
 
         private void Start()
         {
-            Spawner.AddListener(new SpawnerSetter(Spawner));
+            Spawner.AddListener(new SpawnerInjector(Spawner));
         }
     }
 
-    class SpawnerSetter : ISpawnListener<Shape>
+    class SpawnerInjector : ISpawnListener<Shape>
     {
         private readonly Spawner<Shape> spawner;
 
-        public SpawnerSetter(Spawner<Shape> spawner)
+        public SpawnerInjector(Spawner<Shape> spawner)
         {
             this.spawner = spawner;
         }

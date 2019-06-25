@@ -81,8 +81,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   game: {fileID: 2211647473721754268}
+  createAmount: 1
   createTime: 0.1
   destroyTime: 10
+  create: 1
+  destroy: 0
 --- !u!114 &2211647473721754259
 MonoBehaviour:
   m_ObjectHideFlags: 0
