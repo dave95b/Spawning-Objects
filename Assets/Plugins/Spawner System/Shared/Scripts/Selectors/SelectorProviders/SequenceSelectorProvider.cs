@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-using NaughtyAttributes;
+﻿using NaughtyAttributes;
+using UnityEngine;
 
 namespace SpawnerSystem.Shared
 {
@@ -18,7 +17,8 @@ namespace SpawnerSystem.Shared
         private SequenceSelector selector;
         public override ISelector Selector
         {
-            get {
+            get
+            {
                 if (selector is null)
                     selector = new SequenceSelector(objectCount, step, pingPong);
 

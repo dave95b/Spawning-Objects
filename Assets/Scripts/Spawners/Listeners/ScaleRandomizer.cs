@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using Systems;
+﻿using Systems;
+using UnityEngine;
 using Utilities;
 
 namespace Core.Spawners.Listeners
@@ -17,7 +17,7 @@ namespace Core.Spawners.Listeners
 
         private void Awake()
         {
-            actionSource = new ActionSource<Shape>((shape) => () => system.Remove(shape.transform));    
+            actionSource = new ActionSource<Shape>((shape) => () => system.Remove(shape.transform));
         }
 
         protected override void OnShapeSpawned(Shape spawned)

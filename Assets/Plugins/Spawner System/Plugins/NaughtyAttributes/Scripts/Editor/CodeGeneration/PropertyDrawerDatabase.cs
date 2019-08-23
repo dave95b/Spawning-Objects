@@ -11,24 +11,25 @@ namespace NaughtyAttributes.Editor
 
         static PropertyDrawerDatabase()
         {
-            drawersByAttributeType = new Dictionary<Type, PropertyDrawer>();
-            drawersByAttributeType[typeof(DisableIfAttribute)] = new DisableIfPropertyDrawer();
-drawersByAttributeType[typeof(DropdownAttribute)] = new DropdownPropertyDrawer();
-drawersByAttributeType[typeof(EnableIfAttribute)] = new EnableIfPropertyDrawer();
-drawersByAttributeType[typeof(MinMaxSliderAttribute)] = new MinMaxSliderPropertyDrawer();
-drawersByAttributeType[typeof(ProgressBarAttribute)] = new ProgressBarPropertyDrawer();
-drawersByAttributeType[typeof(ReadOnlyAttribute)] = new ReadOnlyPropertyDrawer();
-drawersByAttributeType[typeof(ReorderableListAttribute)] = new ReorderableListPropertyDrawer();
-drawersByAttributeType[typeof(ResizableTextAreaAttribute)] = new ResizableTextAreaPropertyDrawer();
-drawersByAttributeType[typeof(ShowAssetPreviewAttribute)] = new ShowAssetPreviewPropertyDrawer();
-drawersByAttributeType[typeof(SliderAttribute)] = new SliderPropertyDrawer();
+            drawersByAttributeType = new Dictionary<Type, PropertyDrawer>
+            {
+                [typeof(DisableIfAttribute)] = new DisableIfPropertyDrawer(),
+                [typeof(DropdownAttribute)] = new DropdownPropertyDrawer(),
+                [typeof(EnableIfAttribute)] = new EnableIfPropertyDrawer(),
+                [typeof(MinMaxSliderAttribute)] = new MinMaxSliderPropertyDrawer(),
+                [typeof(ProgressBarAttribute)] = new ProgressBarPropertyDrawer(),
+                [typeof(ReadOnlyAttribute)] = new ReadOnlyPropertyDrawer(),
+                [typeof(ReorderableListAttribute)] = new ReorderableListPropertyDrawer(),
+                [typeof(ResizableTextAreaAttribute)] = new ResizableTextAreaPropertyDrawer(),
+                [typeof(ShowAssetPreviewAttribute)] = new ShowAssetPreviewPropertyDrawer(),
+                [typeof(SliderAttribute)] = new SliderPropertyDrawer()
+            };
 
         }
 
         public static PropertyDrawer GetDrawerForAttribute(Type attributeType)
         {
-            PropertyDrawer drawer;
-            if (drawersByAttributeType.TryGetValue(attributeType, out drawer))
+            if (drawersByAttributeType.TryGetValue(attributeType, out PropertyDrawer drawer))
             {
                 return drawer;
             }

@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using Systems;
+﻿using Systems;
+using UnityEngine;
 
 namespace Core.Spawners.Listeners
 {
@@ -15,7 +15,7 @@ namespace Core.Spawners.Listeners
         private OffsetDirection direction;
 
         [SerializeField]
-        private OscillationSystem system; 
+        private OscillationSystem system;
 
         protected override void OnShapeSpawned(Shape spawned)
         {
@@ -37,7 +37,7 @@ namespace Core.Spawners.Listeners
         }
     }
 
-    enum OffsetDirection
+    internal enum OffsetDirection
     {
         Outward, Random
     }

@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
-using UnityEngine.Assertions;
 
 namespace SpawnerSystem.Shared
 {

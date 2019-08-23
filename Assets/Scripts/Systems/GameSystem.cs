@@ -1,8 +1,5 @@
-﻿using Core;
-using NaughtyAttributes;
-using System;
+﻿using NaughtyAttributes;
 using System.Collections.Generic;
-using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -111,7 +108,7 @@ namespace Systems
         }
     }
 
-    class TransformComparer : IEqualityComparer<Transform>
+    internal class TransformComparer : IEqualityComparer<Transform>
     {
         public bool Equals(Transform x, Transform y)
         {

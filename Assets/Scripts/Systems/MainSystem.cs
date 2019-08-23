@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using NaughtyAttributes;
 using Unity.Jobs;
-using NaughtyAttributes;
+using UnityEngine;
 
 namespace Systems
 {

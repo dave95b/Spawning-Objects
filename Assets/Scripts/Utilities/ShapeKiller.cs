@@ -1,10 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using Core;
 using Systems;
-using Core;
-using SpawnerSystem.Spawners;
-using System;
-using System.Collections.Generic;
+using UnityEngine;
 
 namespace Utilities
 {

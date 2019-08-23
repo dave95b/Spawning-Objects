@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using NaughtyAttributes;
 using System.Collections;
-using NaughtyAttributes;
+using UnityEngine;
 
 namespace Core
 {

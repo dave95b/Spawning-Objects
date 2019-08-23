@@ -1,10 +1,9 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-using Unity.Jobs;
-using UnityEngine.Jobs;
-using Unity.Burst;
+﻿using Unity.Burst;
 using Unity.Collections;
+using Unity.Jobs;
 using Unity.Mathematics;
+using UnityEngine;
+using UnityEngine.Jobs;
 
 namespace Systems
 {
@@ -73,7 +72,7 @@ namespace Systems
     }
 
     [BurstCompile(FloatPrecision.Low, FloatMode.Fast)]
-    struct OscillateJob : IJobParallelForTransform
+    internal struct OscillateJob : IJobParallelForTransform
     {
         [NativeDisableParallelForRestriction]
         public NativeArray<OscillationData> Data;

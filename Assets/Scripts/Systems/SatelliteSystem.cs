@@ -1,11 +1,10 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-using Unity.Jobs;
-using UnityEngine.Jobs;
-using Unity.Burst;
+﻿using Unity.Burst;
 using Unity.Collections;
+using Unity.Jobs;
 using Unity.Mathematics;
+using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Jobs;
 
 namespace Systems
 {
@@ -23,7 +22,7 @@ namespace Systems
             planetPositions = new NativeList<float3>(128, Allocator.Persistent);
             satellitePositions = new NativeList<float3>(128, Allocator.Persistent);
         }
-        
+
         public override void OnUpdate(ref JobHandle inputHandle)
         {
             var planetPositionsJob = new PlanetPositionsJob
@@ -108,7 +107,7 @@ namespace Systems
         }
     }
 
-    readonly struct SatelliteData
+    internal readonly struct SatelliteData
     {
         public readonly float Frequency;
         public readonly float3 SinOffset, CosOffset;
@@ -122,7 +121,7 @@ namespace Systems
     }
 
     [BurstCompile]
-    struct PlanetPositionsJob : IJobParallelForTransform
+    internal struct PlanetPositionsJob : IJobParallelForTransform
     {
         [WriteOnly]
         public NativeArray<float3> PlanetPositions;
@@ -134,7 +133,7 @@ namespace Systems
     }
 
     [BurstCompile(FloatPrecision.Low, FloatMode.Fast)]
-    struct SatelliteJob : IJobParallelFor
+    internal struct SatelliteJob : IJobParallelFor
     {
         [ReadOnly]
         public NativeArray<SatelliteData> Data;
@@ -158,7 +157,7 @@ namespace Systems
     }
 
     [BurstCompile]
-    struct SatellitePositionsJob : IJobParallelForTransform
+    internal struct SatellitePositionsJob : IJobParallelForTransform
     {
         [ReadOnly]
         public NativeArray<float3> SatellitePositions;

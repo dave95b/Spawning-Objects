@@ -11,15 +11,16 @@ namespace NaughtyAttributes.Editor
 
         static NativePropertyDrawerDatabase()
         {
-            drawersByAttributeType = new Dictionary<Type, NativePropertyDrawer>();
-            drawersByAttributeType[typeof(ShowNativePropertyAttribute)] = new ShowNativePropertyNativePropertyDrawer();
+            drawersByAttributeType = new Dictionary<Type, NativePropertyDrawer>
+            {
+                [typeof(ShowNativePropertyAttribute)] = new ShowNativePropertyNativePropertyDrawer()
+            };
 
         }
 
         public static NativePropertyDrawer GetDrawerForAttribute(Type attributeType)
         {
-            NativePropertyDrawer drawer;
-            if (drawersByAttributeType.TryGetValue(attributeType, out drawer))
+            if (drawersByAttributeType.TryGetValue(attributeType, out NativePropertyDrawer drawer))
             {
                 return drawer;
             }

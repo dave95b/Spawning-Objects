@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 
 namespace SpawnerSystem.Shared
 {
@@ -15,7 +14,7 @@ namespace SpawnerSystem.Shared
             {
                 pingPong = value;
                 if (!pingPong)
-                    direction = 1; 
+                    direction = 1;
             }
         }
 

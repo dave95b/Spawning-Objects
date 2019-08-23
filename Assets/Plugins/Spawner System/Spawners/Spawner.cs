@@ -1,9 +1,8 @@
-﻿using UnityEngine;
-using UnityEngine.Assertions;
-using System.Collections.Generic;
+﻿using SpawnerSystem.ObjectPooling;
 using SpawnerSystem.Shared;
-using SpawnerSystem.ObjectPooling;
-using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace SpawnerSystem.Spawners
 {
@@ -17,10 +16,10 @@ namespace SpawnerSystem.Spawners
         private readonly Dictionary<T, Poolable<T>> spawnedPoolables;
         private Poolable<T>[] poolableArray;
 
-        
+
         public Spawner(IPool<T> pool, ISpawnPoint[] spawnPoints, ISelector spawnPointSelector) : this(pool, spawnPoints, spawnPointSelector, new List<ISpawnListener<T>>())
         {
-            
+
         }
 
         public Spawner(IPool<T> pool, ISpawnPoint[] spawnPoints, ISelector spawnPointSelector, List<ISpawnListener<T>> spawnListeners)

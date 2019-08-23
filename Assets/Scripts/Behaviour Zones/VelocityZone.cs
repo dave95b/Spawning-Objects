@@ -1,12 +1,12 @@
-﻿using UnityEngine;
+﻿using NaughtyAttributes;
+using System;
 using System.Collections.Generic;
 using Systems;
-using NaughtyAttributes;
-using System;
+using UnityEngine;
 
 namespace Core.BehaviourZones
 {
-    enum Direction
+    internal enum Direction
     {
         Unchanged, Reverse, Forward
     }

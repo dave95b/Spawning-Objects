@@ -1,9 +1,8 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-using Unity.Jobs;
-using UnityEngine.Jobs;
-using Unity.Burst;
+﻿using Unity.Burst;
 using Unity.Collections;
+using Unity.Jobs;
+using UnityEngine;
+using UnityEngine.Jobs;
 
 namespace Systems
 {
@@ -25,7 +24,7 @@ namespace Systems
                 DeltaTime = Time.deltaTime
             };
 
-            inputHandle = job.Schedule(transforms, inputHandle); 
+            inputHandle = job.Schedule(transforms, inputHandle);
         }
 
 
@@ -57,7 +56,7 @@ namespace Systems
     }
 
     [BurstCompile]
-    struct MoveJob : IJobParallelForTransform
+    internal struct MoveJob : IJobParallelForTransform
     {
         [ReadOnly]
         public NativeArray<Vector3> Velocities;

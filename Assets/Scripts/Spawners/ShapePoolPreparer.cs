@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-using SpawnerSystem.ObjectPooling;
+﻿using SpawnerSystem.ObjectPooling;
+using UnityEngine;
 
 namespace Core.Spawners
 {

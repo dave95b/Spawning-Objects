@@ -1,10 +1,8 @@
-﻿using UnityEngine;
-using System.Collections;
-using Unity.Jobs;
-using UnityEngine.Jobs;
-using Unity.Burst;
+﻿using Unity.Burst;
 using Unity.Collections;
-using Unity.Mathematics;
+using Unity.Jobs;
+using UnityEngine;
+using UnityEngine.Jobs;
 
 namespace Systems
 {
@@ -60,7 +58,7 @@ namespace Systems
     }
 
     [BurstCompile(FloatPrecision.Low, FloatMode.Fast)]
-    struct RotateJob : IJobParallelForTransform
+    internal struct RotateJob : IJobParallelForTransform
     {
         [ReadOnly]
         public NativeArray<Quaternion> AngularVelocities;

@@ -11,15 +11,16 @@ namespace NaughtyAttributes.Editor
 
         static FieldDrawerDatabase()
         {
-            drawersByAttributeType = new Dictionary<Type, FieldDrawer>();
-            drawersByAttributeType[typeof(ShowNonSerializedFieldAttribute)] = new ShowNonSerializedFieldFieldDrawer();
+            drawersByAttributeType = new Dictionary<Type, FieldDrawer>
+            {
+                [typeof(ShowNonSerializedFieldAttribute)] = new ShowNonSerializedFieldFieldDrawer()
+            };
 
         }
 
         public static FieldDrawer GetDrawerForAttribute(Type attributeType)
         {
-            FieldDrawer drawer;
-            if (drawersByAttributeType.TryGetValue(attributeType, out drawer))
+            if (drawersByAttributeType.TryGetValue(attributeType, out FieldDrawer drawer))
             {
                 return drawer;
             }

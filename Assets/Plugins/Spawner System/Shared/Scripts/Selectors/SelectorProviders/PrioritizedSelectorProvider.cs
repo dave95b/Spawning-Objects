@@ -1,9 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections.Generic;
-using System;
 using System.Linq;
-using NaughtyAttributes;
-using System.Diagnostics;
+using UnityEngine;
 
 namespace SpawnerSystem.Shared
 {

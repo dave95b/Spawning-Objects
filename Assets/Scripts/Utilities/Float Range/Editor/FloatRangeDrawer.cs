@@ -1,6 +1,6 @@
-﻿using UnityEditor;
+﻿using Core;
+using UnityEditor;
 using UnityEngine;
-using Core;
 
 [CustomPropertyDrawer(typeof(FloatRange))]
 public class FloatRangeDrawer : PropertyDrawer

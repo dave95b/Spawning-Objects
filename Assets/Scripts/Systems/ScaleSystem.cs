@@ -1,12 +1,12 @@
 ﻿using System;
-using UnityEngine;
 using System.Collections.Generic;
-using Unity.Jobs;
-using UnityEngine.Jobs;
 using Unity.Burst;
 using Unity.Collections;
+using Unity.Jobs;
 using Unity.Mathematics;
+using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Jobs;
 
 namespace Systems
 {
@@ -129,7 +129,7 @@ namespace Systems
     }
 
     [BurstCompile(FloatPrecision.Low, FloatMode.Fast)]
-    struct CalculateScaleJob : IJobParallelFor
+    internal struct CalculateScaleJob : IJobParallelFor
     {
         [ReadOnly]
         public NativeArray<ScaleRanges> ScaleRanges;
@@ -144,7 +144,7 @@ namespace Systems
 
         [WriteOnly]
         public NativeArray<float> Scales;
-        
+
 
         public void Execute(int index)
         {
@@ -162,7 +162,7 @@ namespace Systems
     }
 
     [BurstCompile]
-    struct ApplyScaleJob : IJobParallelForTransform
+    internal struct ApplyScaleJob : IJobParallelForTransform
     {
         [ReadOnly]
         public NativeArray<float> Scales;
@@ -174,7 +174,7 @@ namespace Systems
     }
 
     [BurstCompile]
-    struct FindFinishedJob : IJob
+    internal struct FindFinishedJob : IJob
     {
         [ReadOnly]
         public NativeArray<float> Times, Durations;

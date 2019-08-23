@@ -11,16 +11,17 @@ namespace NaughtyAttributes.Editor
 
         static PropertyMetaDatabase()
         {
-            metasByAttributeType = new Dictionary<Type, PropertyMeta>();
-            metasByAttributeType[typeof(InfoBoxAttribute)] = new InfoBoxPropertyMeta();
-metasByAttributeType[typeof(OnValueChangedAttribute)] = new OnValueChangedPropertyMeta();
+            metasByAttributeType = new Dictionary<Type, PropertyMeta>
+            {
+                [typeof(InfoBoxAttribute)] = new InfoBoxPropertyMeta(),
+                [typeof(OnValueChangedAttribute)] = new OnValueChangedPropertyMeta()
+            };
 
         }
 
         public static PropertyMeta GetMetaForAttribute(Type attributeType)
         {
-            PropertyMeta meta;
-            if (metasByAttributeType.TryGetValue(attributeType, out meta))
+            if (metasByAttributeType.TryGetValue(attributeType, out PropertyMeta meta))
             {
                 return meta;
             }

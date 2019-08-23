@@ -1,8 +1,7 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using Core.Spawners.Zones;
 using NaughtyAttributes;
-using Core.Spawners.Zones;
 using SpawnerSystem.Spawners;
+using UnityEngine;
 
 namespace Core.Spawners.Listeners
 {

@@ -1,10 +1,8 @@
-﻿using UnityEngine;
+﻿using SpawnerSystem.Spawners;
 using System.Collections.Generic;
-using SpawnerSystem.Spawners;
 using Systems;
-using System.Collections;
+using UnityEngine;
 using Utilities;
-using UnityEngine.Assertions;
 
 namespace Core.Spawners.Listeners.Satellites
 {
@@ -24,9 +22,6 @@ namespace Core.Spawners.Listeners.Satellites
 
         [SerializeField]
         private ShapeSpawnerPreparer spawnerPreparer;
-
-        [SerializeField]
-        private SatelliteSystem satelliteSystem;
 
         [SerializeField]
         private ScaleSystem scaleSystem;

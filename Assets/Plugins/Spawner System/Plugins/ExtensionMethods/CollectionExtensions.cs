@@ -1,32 +1,31 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public static class CollectionExtensions
 {
 
-#region IList
+    #region IList
 
-	public static void Shuffle<T>(this IList<T> list)
+    public static void Shuffle<T>(this IList<T> list)
     {
-		int count = list.Count;
-		var last = count - 1;
+        int count = list.Count;
+        var last = count - 1;
 
-		for (int i = 0; i < last; ++i)
+        for (int i = 0; i < last; ++i)
         {
-			int randomIndex = Random.Range(i, count);
-			T tmp = list[i];
-			list[i] = list[randomIndex];
-			list[randomIndex] = tmp;
-		}
-	}
+            int randomIndex = Random.Range(i, count);
+            T tmp = list[i];
+            list[i] = list[randomIndex];
+            list[randomIndex] = tmp;
+        }
+    }
 
-	public static T GetRandom<T>(this IList<T> list)
+    public static T GetRandom<T>(this IList<T> list)
     {
-		return list[Random.Range(0, list.Count)];
-	}
+        return list[Random.Range(0, list.Count)];
+    }
 
-	public static void Swap<T>(this IList<T> list, int sourceIndex, int destinationIndex)
+    public static void Swap<T>(this IList<T> list, int sourceIndex, int destinationIndex)
     {
         if (sourceIndex == destinationIndex)
             return;
@@ -43,28 +42,28 @@ public static class CollectionExtensions
         list.RemoveAt(lastIndex);
     }
 
-#endregion IList
+    #endregion IList
 
-#region Arrays
+    #region Arrays
 
-	public static void Shuffle<T>(this T[] array)
+    public static void Shuffle<T>(this T[] array)
     {
-		int count = array.Length;
-		var last = count - 1;
+        int count = array.Length;
+        var last = count - 1;
 
-		for (int i = 0; i < last; ++i)
+        for (int i = 0; i < last; ++i)
         {
-			int randomIndex = Random.Range(i, count);
-			T tmp = array[i];
-			array[i] = array[randomIndex];
-			array[randomIndex] = tmp;
-		}
-	}
+            int randomIndex = Random.Range(i, count);
+            T tmp = array[i];
+            array[i] = array[randomIndex];
+            array[randomIndex] = tmp;
+        }
+    }
 
-	public static T GetRandom<T>(this T[] array)
+    public static T GetRandom<T>(this T[] array)
     {
-		return array[Random.Range(0, array.Length)];
-	}
+        return array[Random.Range(0, array.Length)];
+    }
 
 
     public static void Swap<T>(this T[] array, int sourceIndex, int destinationIndex)

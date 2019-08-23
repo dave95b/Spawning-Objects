@@ -1,7 +1,5 @@
-﻿using UnityEngine;
-using System;
+﻿using SpawnerSystem.Shared;
 using UnityEngine.Assertions;
-using SpawnerSystem.Shared;
 
 namespace SpawnerSystem.ObjectPooling
 {

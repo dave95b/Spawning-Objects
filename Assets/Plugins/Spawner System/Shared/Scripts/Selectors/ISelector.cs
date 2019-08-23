@@ -1,9 +1,6 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-
-namespace SpawnerSystem.Shared
+﻿namespace SpawnerSystem.Shared
 {
-    public interface ISelector 
+    public interface ISelector
     {
         int SelectIndex();
     }

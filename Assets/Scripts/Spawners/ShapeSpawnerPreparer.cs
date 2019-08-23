@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using SpawnerSystem.ObjectPooling;
 using SpawnerSystem.Spawners;
-using SpawnerSystem.ObjectPooling;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Core.Spawners
 {
@@ -26,7 +26,7 @@ namespace Core.Spawners
         }
     }
 
-    class SpawnerInjector : ISpawnListener<Shape>
+    internal class SpawnerInjector : ISpawnListener<Shape>
     {
         private readonly Spawner<Shape> spawner;
 

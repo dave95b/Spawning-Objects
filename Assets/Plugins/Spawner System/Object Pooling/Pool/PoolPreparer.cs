@@ -1,9 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
-using NaughtyAttributes;
+﻿using NaughtyAttributes;
 using System.Collections.Generic;
-using System;
-using System.Diagnostics;
+using UnityEngine;
 
 namespace SpawnerSystem.ObjectPooling
 {

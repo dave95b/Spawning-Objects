@@ -1,7 +1,5 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-using Systems;
-using Core.Spawners.Listeners.Satellites;
+﻿using Systems;
+using UnityEngine;
 
 namespace Core.Spawners.Listeners
 {

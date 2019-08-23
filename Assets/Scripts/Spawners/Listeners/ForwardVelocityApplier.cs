@@ -1,7 +1,5 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-using SpawnerSystem.Spawners;
-using Systems;
+﻿using Systems;
+using UnityEngine;
 
 namespace Core.Spawners.Listeners
 {
@@ -37,7 +35,7 @@ namespace Core.Spawners.Listeners
             moveSystem.Remove(despawned.transform);
         }
 
-        enum MovementDirection
+        private enum MovementDirection
         {
             Forward, Outward, Random
         }

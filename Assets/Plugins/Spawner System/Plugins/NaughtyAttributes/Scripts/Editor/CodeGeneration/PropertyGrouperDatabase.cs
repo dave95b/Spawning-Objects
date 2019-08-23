@@ -11,15 +11,16 @@ namespace NaughtyAttributes.Editor
 
         static PropertyGrouperDatabase()
         {
-            groupersByAttributeType = new Dictionary<Type, PropertyGrouper>();
-            groupersByAttributeType[typeof(BoxGroupAttribute)] = new BoxGroupPropertyGrouper();
+            groupersByAttributeType = new Dictionary<Type, PropertyGrouper>
+            {
+                [typeof(BoxGroupAttribute)] = new BoxGroupPropertyGrouper()
+            };
 
         }
 
         public static PropertyGrouper GetGrouperForAttribute(Type attributeType)
         {
-            PropertyGrouper grouper;
-            if (groupersByAttributeType.TryGetValue(attributeType, out grouper))
+            if (groupersByAttributeType.TryGetValue(attributeType, out PropertyGrouper grouper))
             {
                 return grouper;
             }

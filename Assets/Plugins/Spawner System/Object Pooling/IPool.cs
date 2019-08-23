@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-
-
-namespace SpawnerSystem.ObjectPooling
+﻿namespace SpawnerSystem.ObjectPooling
 {
     public interface IPool<T>
     {

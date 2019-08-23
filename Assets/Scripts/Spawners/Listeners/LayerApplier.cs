@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-
-namespace Core.Spawners.Listeners
+﻿namespace Core.Spawners.Listeners
 {
     public class LayerApplier : SpawnZoneListener
     {
